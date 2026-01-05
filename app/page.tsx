@@ -49,7 +49,7 @@ export default function Home() {
             <p className='text-gray-600 dark:text-gray-300 text-sm md:text-base transition-colors'>Website PHP untuk mengelola data</p>
           </div></Link>
           <Link href="https://github.com/fiqihbadrian/Python-Game-Loncat" target='_blank'><div className='card-item bg-white dark:bg-[#1e2a47] p-4 rounded-lg w-full sm:w-80 md:w-auto shadow-md transition-colors' data-aos="zoom-in" data-aos-delay="400">
-            <Image src="/images/smp.png" width={300} height={200} alt="Project 2" className='rounded-lg w-full h-auto'/>
+            <Image src="/images/pgl.png" width={300} height={200} alt="Project 2" className='rounded-lg w-full h-auto'/>
             <h2 className='text-lg md:text-xl font-semibold text-gray-900 dark:text-white mt-2 transition-colors'>Python Game</h2>
             <p className='text-gray-600 dark:text-gray-300 text-sm md:text-base transition-colors'>Game python sederhana</p>
           </div></Link>
