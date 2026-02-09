@@ -244,7 +244,7 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
             {/* MOBILE BUTTON */}
             <button
               className={`md:hidden text-2xl ${
-                scrolled ? "text-zinc-800 dark:text-white" : "text-white"
+                scrolled ? "text-zinc-800 dark:text-white" : "text-gray-900 dark:text-white"
               }`}
               onClick={() => setOpen(!open)}
             >
@@ -256,90 +256,41 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
 
       {/* MOBILE MENU */}
       {open && (
-        <div className="md:hidden fixed top-24 w-full bg-white/90 dark:bg-[#1a3d2a]/90 backdrop-blur z-40 p-4">
-          {["Home", "About", "Contact"].map((item) => (
-            <Link
-              key={item}
-              href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-              onClick={() => setOpen(false)}
-              className="block py-2 font-medium text-white"
-            >
-              {item}
-            </Link>
-          ))}
+        <div className="md:hidden fixed top-24 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md z-40 p-6 shadow-lg border-t border-gray-200 dark:border-gray-800">
+          <div className="flex flex-col gap-1">
+            {["Home", "About", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                onClick={() => setOpen(false)}
+                className="block py-3 px-4 font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
+              >
+                {item}
+              </Link>
+            ))}
+          </div>
 
-          <hr className="my-3 border-white/20" />
-
-          {user ? (
-            <>
-              <Link
-                href="/profile?tab=orders"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 py-2.5 font-medium text-white"
-              >
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                </svg>
-                <span>Pesanan Saya</span>
-              </Link>
-              <Link
-                href="/profile?tab=inbox"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 py-2.5 font-medium text-white relative"
-              >
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                </svg>
-                <span>Inbox</span>
-                {unreadCount > 0 && (
-                  <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                    {unreadCount}
-                  </span>
-                )}
-              </Link>
-              <Link
-                href="/profile"
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 py-2.5 font-medium text-white"
-              >
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-                <span>Profil Saya</span>
-              </Link>
-              {user.role === "ADMIN" && (
-                <Link
-                  href="/dashboard"
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-3 py-2.5 font-medium text-blue-400"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                  </svg>
-                  <span>Dashboard Admin</span>
-                </Link>
-              )}
-              <button
-                onClick={() => {
-                  setOpen(false);
-                  setShowLogoutModal(true);
-                }}
-                className="block py-2.5 text-red-400 font-medium"
-              >
-                Logout
-              </button>
-            </>
-          ) : (
+          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
             <button
               onClick={() => {
                 setOpen(false);
-                onLoginClick();
+                onThemeToggle();
               }}
-              className="mt-2 w-full py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+              className="flex items-center gap-3 w-full py-3 px-4 font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
             >
-              Login / Daftar
+              {theme === 'dark' ? (
+                <>
+                  <FaSun className="text-lg text-yellow-500" />
+                  <span>Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <FaMoon className="text-lg text-blue-500" />
+                  <span>Dark Mode</span>
+                </>
+              )}
             </button>
-          )}
+          </div>
         </div>
       )}
 
