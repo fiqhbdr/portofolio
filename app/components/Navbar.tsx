@@ -1,65 +1,380 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { useTheme } from "next-themes";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FaSun, FaMoon } from "react-icons/fa";
 
-export default function Navbar() {
+type User = {
+  id: number;
+  email: string;
+  name?: string;
+  role: string;
+  image?: string;
+};
+
+type NavbarProps = {
+  user: User | null;
+  onLogout: () => void;
+  onLoginClick: () => void;
+  theme?: string;
+  onThemeToggle?: () => void;
+};
+
+export default function Navbar({ user = null, onLogout = () => {}, onLoginClick = () => {}, theme = 'dark', onThemeToggle = () => {} }: NavbarProps) {
   const [open, setOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [accountOpen, setAccountOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setMounted(true);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 80);
+      setAccountOpen(false);
+      setOpen(false);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadNotifications = async () => {
+      try {
+        const res = await fetch("/api/notifications");
+        if (res.ok) {
+          const data = await res.json();
+          const unread = data.notifications.filter((n: any) => !n.isRead).length;
+          setUnreadCount(unread);
+        }
+      } catch (error) {
+        console.error("Error loading notifications:", error);
+      }
+    };
+
+    loadNotifications();
+    const interval = setInterval(loadNotifications, 30000);
+    return () => clearInterval(interval);
+  }, [user]);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        setAccountOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   return (
     <>
-      {/* Navbar Wrapper */}
-      <div className="w-full bg-gray-100 dark:bg-[#2d5197] flex justify-center py-4 transition-colors">
-        
-        {/* Navbar Container */}
-        <nav className="w-[90%] md:w-full max-w-5xl bg-white dark:bg-[#1e2a47] rounded-full flex items-center justify-between px-4 md:px-8 py-3 relative shadow-sm transition-colors">
-
-          {/* Logo */}
-          <h1 className="text-xl md:text-2xl font-extrabold tracking-wide text-gray-900 dark:text-white transition-colors">
+      {/* WRAPPER (STABIL) */}
+      <div className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none">
+        <nav
+          className={`pointer-events-auto transition-all duration-500 ease-out
+            flex items-center justify-between
+            ${
+              scrolled
+                ? "mt-4 mx-4 sm:mx-6 lg:mx-8 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-7xl rounded-full bg-white/80 dark:bg-[#2d5197]/80 backdrop-blur-md shadow-lg px-6 md:px-10 py-4"
+                : "w-full rounded-none bg-transparent px-6 md:px-10 py-4"
+            }`}
+        >
+          {/* LOGO */}
+          <Link
+            href="/"
+            className={`font-bold tracking-wide transition-all duration-500
+              ${
+                scrolled
+                  ? "text-white dark:text-white text-lg"
+                  : "text-gray-900 dark:text-white text-xl md:text-2xl drop-shadow-lg"
+              }`}
+          >
             BIAN
-          </h1>
+          </Link>
 
-          {/* Desktop Menu */}
-          <div className="hidden md:flex gap-6 md:gap-8 text-lg">
-            <Link href="/" className="text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-gray-300 transition-colors">Home</Link>
-            <Link href="/about" className="text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-gray-300 transition-colors">About</Link>
-            <Link href="/contact" className="text-gray-800 dark:text-white hover:text-blue-600 dark:hover:text-gray-300 transition-colors">Contact</Link>
+          {/* DESKTOP MENU */}
+          <div className="hidden md:flex gap-8">
+            {["Home", "About", "Contact"].map((item) => (
+              <Link
+                key={item}
+                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className={`font-medium transition-colors
+                  ${
+                    scrolled
+                      ? "text-zinc-800 dark:text-white hover:text-blue-600"
+                      : "text-gray-900 dark:text-white hover:text-gray-700 drop-shadow-md"
+                  }`}
+              >
+                {item}
+              </Link>
+            ))}
           </div>
 
-          {/* Theme Toggle Button */}
-          <button
-            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-            className="hidden md:flex items-center justify-center w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {mounted && (theme === 'dark' ? <FaSun /> : <FaMoon />)}
-          </button>
+          {/* RIGHT */}
+          <div className="flex items-center gap-3">
+            {/* THEME TOGGLE BUTTON */}
+            <button
+              onClick={onThemeToggle}
+              className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full transition-all ${
+                scrolled
+                  ? "bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-white"
+                  : "bg-white/90 dark:bg-white/20 text-gray-900 dark:text-white shadow-md"
+              }`}
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
+            </button>
 
-          {/* Mobile Hamburger Button */}
-          <button
-            className="md:hidden text-gray-800 dark:text-white text-3xl"
-            onClick={() => setOpen(!open)}
-          >
-            {open ? <HiX /> : <HiMenu />}
-          </button>
+            {/* AUTH DESKTOP */}
+            {user ? (
+              <div ref={dropdownRef} className="hidden md:block relative">
+                {/* AVATAR ONLY */}
+                <button
+                  onClick={() => setAccountOpen(!accountOpen)}
+                  className={`w-10 h-10 rounded-full overflow-hidden flex items-center justify-center transition-all
+                    ${
+                      scrolled
+                        ? "bg-zinc-100 dark:bg-zinc-700"
+                        : "bg-white/20"
+                    }`}
+                >
+                  {user.image ? (
+                    <img
+                      src={user.image}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <span className="text-sm font-bold text-white">
+                      {(user.name || user.email)[0].toUpperCase()}
+                    </span>
+                  )}
+                </button>
+
+                {/* DROPDOWN */}
+                {accountOpen && (
+                  <div className="absolute right-0 mt-3 w-56 rounded-xl bg-white dark:bg-[#1a3d2a] shadow-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden">
+                    <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
+                      <p className="text-sm font-semibold text-zinc-800 dark:text-white">
+                        {user.name || "Akun"}
+                      </p>
+                      <p className="text-xs text-zinc-500 truncate">
+                        {user.email}
+                      </p>
+                      <p className="text-xs mt-1 text-blue-600 font-medium">
+                        {user.role}
+                      </p>
+                    </div>
+
+                    <Link
+                      href="/profile?tab=orders"
+                      onClick={() => setAccountOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+                    >
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                      </svg>
+                      <span className="flex-1">Pesanan Saya</span>
+                    </Link>
+
+                    <Link
+                      href="/profile?tab=inbox"
+                      onClick={() => setAccountOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors relative"
+                    >
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                      </svg>
+                      <span className="flex-1">Inbox</span>
+                      {unreadCount > 0 && (
+                        <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                          {unreadCount}
+                        </span>
+                      )}
+                    </Link>
+
+                    <Link
+                      href="/profile"
+                      onClick={() => setAccountOpen(false)}
+                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+                    >
+                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                      <span className="flex-1">Profil Saya</span>
+                    </Link>
+
+                    {user.role === "ADMIN" && (
+                      <Link
+                        href="/dashboard"
+                        onClick={() => setAccountOpen(false)}
+                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+                      >
+                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                        </svg>
+                        <span>Dashboard Admin</span>
+                      </Link>
+                    )}
+
+                    <button
+                      onClick={() => {
+                        setAccountOpen(false);
+                        setShowLogoutModal(true);
+                      }}
+                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : null}
+
+            {/* MOBILE BUTTON */}
+            <button
+              className={`md:hidden text-2xl ${
+                scrolled ? "text-zinc-800 dark:text-white" : "text-white"
+              }`}
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <HiX /> : <HiMenu />}
+            </button>
+          </div>
         </nav>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* MOBILE MENU */}
       {open && (
-        <div className="md:hidden w-full bg-white dark:bg-gray-800 text-gray-800 dark:text-[#ffffffda] flex flex-col py-4 gap-4 text-center text-lg transition-colors">
-          <Link href="/" onClick={() => setOpen(false)} className="hover:text-blue-600 dark:hover:text-white text-base md:text-lg">Home</Link>
-          <Link href="/about" onClick={() => setOpen(false)} className="hover:text-blue-600 dark:hover:text-white text-base md:text-lg">About</Link>
-          <Link href="/contact" onClick={() => setOpen(false)} className="hover:text-blue-600 dark:hover:text-white text-base md:text-lg">Contact</Link>
+        <div className="md:hidden fixed top-24 w-full bg-white/90 dark:bg-[#1a3d2a]/90 backdrop-blur z-40 p-4">
+          {["Home", "About", "Contact"].map((item) => (
+            <Link
+              key={item}
+              href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+              onClick={() => setOpen(false)}
+              className="block py-2 font-medium text-white"
+            >
+              {item}
+            </Link>
+          ))}
+
+          <hr className="my-3 border-white/20" />
+
+          {user ? (
+            <>
+              <Link
+                href="/profile?tab=orders"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 py-2.5 font-medium text-white"
+              >
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+                <span>Pesanan Saya</span>
+              </Link>
+              <Link
+                href="/profile?tab=inbox"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 py-2.5 font-medium text-white relative"
+              >
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                </svg>
+                <span>Inbox</span>
+                {unreadCount > 0 && (
+                  <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
+              </Link>
+              <Link
+                href="/profile"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 py-2.5 font-medium text-white"
+              >
+                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+                <span>Profil Saya</span>
+              </Link>
+              {user.role === "ADMIN" && (
+                <Link
+                  href="/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-3 py-2.5 font-medium text-blue-400"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
+                  </svg>
+                  <span>Dashboard Admin</span>
+                </Link>
+              )}
+              <button
+                onClick={() => {
+                  setOpen(false);
+                  setShowLogoutModal(true);
+                }}
+                className="block py-2.5 text-red-400 font-medium"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={() => {
+                setOpen(false);
+                onLoginClick();
+              }}
+              className="mt-2 w-full py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
+            >
+              Login / Daftar
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* LOGOUT CONFIRMATION MODAL */}
+      {showLogoutModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-white dark:bg-[#1a3d2a] rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-zinc-200 dark:border-zinc-700">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
+                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+              </div>
+              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Konfirmasi Logout</h3>
+            </div>
+            <p className="text-zinc-600 dark:text-zinc-300 mb-6">
+              Apakah Anda yakin ingin keluar dari akun? Anda harus login kembali untuk mengakses fitur yang memerlukan autentikasi.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="flex-1 px-4 py-2.5 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+              >
+                Batal
+              </button>
+              <button
+                onClick={() => {
+                  setShowLogoutModal(false);
+                  onLogout();
+                }}
+                className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors"
+              >
+                Ya, Logout
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </>
