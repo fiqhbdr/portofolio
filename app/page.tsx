@@ -2,25 +2,26 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { FaGithub } from 'react-icons/fa';
 import ColorBends from '@/components/ColorBends';
+import TypeWriter from './components/TypeWriter';
 
 export default function Home() {
   return (
     <div className="w-full">
       {/* Hero Section */}
       <section className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-b from-blue-50 via-purple-50 to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900" data-aos="fade-up">
-        <div className="absolute inset-0 w-full h-full opacity-80">
+        <div className="absolute inset-0 w-full h-full">
           <ColorBends
             rotation={45}
-            speed={0.15}
+            speed={0.2}
             colors={["#29fbff","#f4435e"]}
             transparent
             autoRotate={0}
-            scale={0.8}
-            frequency={0.8}
-            warpStrength={0.8}
-            mouseInfluence={0.5}
-            parallax={0.3}
-            noise={0.05}
+            scale={1}
+            frequency={1}
+            warpStrength={1}
+            mouseInfluence={0.8}
+            parallax={0.5}
+            noise={0.1}
           />
         </div>
         <div className="container mx-auto max-w-7xl relative z-10">
@@ -32,9 +33,13 @@ export default function Home() {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-poppins leading-tight text-gray-800 dark:text-[#e5d9c3] transition-colors" data-aos="fade-up" data-aos-delay="200">
                 HELLO I'M<br />FIQIH BADRIAN
               </h1>
-              <p className="text-xl lg:text-2xl mt-6 text-gray-600 dark:text-gray-200 transition-colors" data-aos="fade-up" data-aos-delay="400">
-                Developer, Designer
-              </p>
+              <div className="text-xl lg:text-2xl mt-6 text-gray-600 dark:text-gray-200 transition-colors" data-aos="fade-up" data-aos-delay="400">
+                <TypeWriter 
+                  texts={["I'm Front End Developer", "I Like Code"]}
+                  speed={100}
+                  delay={2000}
+                />
+              </div>
             </div>
             <div className="hidden lg:flex justify-center lg:justify-end" data-aos="fade-left" data-aos-delay="300">
               <Image
@@ -105,11 +110,17 @@ export default function Home() {
           <h2 className='text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-10 transition-colors' data-aos="fade-up">
             Certificate
           </h2>
-          <div className='flex justify-center'>
+          <div className='flex flex-wrap justify-center gap-6'>
             <Link href="https://www.dicoding.com/certificates/KEXL21390ZG2" target='_blank' className='w-full max-w-sm'>
               <div className='bg-white dark:bg-[#1e2a47] p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300'>
-                <Image src="/images/dicoding1/dicoding1_page-0001.jpg" width={300} height={200} alt="Certificate 1" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75}/>
+                <Image src="/images/dicoding1/dicoding1_page-0001.jpg" width={300} height={200} alt="Certificate Dasar AI" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75}/>
                 <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center transition-colors'>Dicoding - Dasar AI</h3>
+              </div>
+            </Link>
+            <Link href="https://www.dicoding.com/certificates/N9ZO28M1RPG5" target='_blank' className='w-full max-w-sm'>
+              <div className='bg-white dark:bg-[#1e2a47] p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300'>
+                <Image src="/images/dicoding1/dicoding1_page-0002.jpg" width={300} height={200} alt="Certificate Dicoding" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75}/>
+                <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center transition-colors'>Dicoding - Dasar Pemrograman Web</h3>
               </div>
             </Link>
           </div>

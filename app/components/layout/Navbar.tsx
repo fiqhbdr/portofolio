@@ -84,18 +84,18 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
             flex items-center justify-between
             ${
               scrolled
-                ? "mt-4 mx-4 sm:mx-6 lg:mx-8 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-7xl rounded-full bg-white/80 dark:bg-[#2d5197]/80 backdrop-blur-md shadow-lg px-6 md:px-10 py-4"
+                ? "mt-4 mx-4 sm:mx-6 lg:mx-8 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-7xl rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg px-6 md:px-10 py-4"
                 : "w-full rounded-none bg-transparent px-6 md:px-10 py-4"
             }`}
         >
           {/* LOGO */}
           <Link
             href="/"
-            className={`font-bold tracking-wide transition-all duration-500
+            className={`font-bold tracking-wide transition-all duration-500 hover:scale-110
               ${
                 scrolled
-                  ? "text-white dark:text-white text-lg"
-                  : "text-gray-900 dark:text-white text-xl md:text-2xl drop-shadow-lg"
+                  ? "text-white dark:text-white text-lg hover:text-blue-400"
+                  : "text-gray-900 dark:text-white text-xl md:text-2xl drop-shadow-lg hover:text-blue-600 dark:hover:text-blue-400"
               }`}
           >
             BIAN
@@ -107,14 +107,15 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
               <Link
                 key={item}
                 href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                className={`font-medium transition-colors
+                className={`font-medium transition-all duration-300 relative group
                   ${
                     scrolled
-                      ? "text-zinc-800 dark:text-white hover:text-blue-600"
-                      : "text-gray-900 dark:text-white hover:text-gray-700 drop-shadow-md"
+                      ? "text-zinc-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
+                      : "text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 drop-shadow-md"
                   }`}
               >
                 {item}
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
               </Link>
             ))}
           </div>
@@ -124,10 +125,10 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
             {/* THEME TOGGLE BUTTON */}
             <button
               onClick={onThemeToggle}
-              className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full transition-all ${
+              className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:scale-110 hover:rotate-12 ${
                 scrolled
-                  ? "bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-white"
-                  : "bg-white/90 dark:bg-white/20 text-gray-900 dark:text-white shadow-md"
+                  ? "bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-600"
+                  : "bg-white/90 dark:bg-white/20 text-gray-900 dark:text-white shadow-md hover:bg-white dark:hover:bg-white/30 hover:shadow-lg"
               }`}
               aria-label="Toggle theme"
             >

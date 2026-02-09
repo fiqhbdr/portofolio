@@ -1,6 +1,6 @@
 import "./globals.css";
-import NavbarWrapper from "./components/NavbarWrapper";
-import Footer from "./components/Footer";
+import NavbarWrapper from "./components/layout/NavbarWrapper";
+import Footer from "./components/layout/Footer";
 import AOSInit from "./components/AOSInit";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "./components/ThemeProvider";
