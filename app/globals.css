@@ -136,3 +136,29 @@ body {
     @apply bg-background text-foreground;
   }
 }
+/* Custom animation delays for floating shapes */
+@layer utilities {
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+  .delay-700 {
+    animation-delay: 0.7s;
+  }
+  .delay-1000 {
+    animation-delay: 1s;
+  }
+}
+
+/* Slow spinning animation for profile picture */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}

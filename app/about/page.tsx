@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { FaBriefcase } from 'react-icons/fa';
+import { HoverCard } from '@/components/ui/card-hover-effect';
 
 export default function About() {
   return (
@@ -22,7 +23,7 @@ export default function About() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
           {/* Profile Card */}
           <div className="lg:col-span-1" data-aos="fade-right">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50 text-center">
+            <HoverCard className="text-center p-8">
               <div className="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-blue-500 shadow-xl">
                 <Image
                   src="/images/logo.png"
@@ -42,12 +43,12 @@ export default function About() {
               <p className="text-gray-600 dark:text-gray-400 text-sm">
                 Based in Indonesia
               </p>
-            </div>
+            </HoverCard>
           </div>
 
           {/* Bio Section */}
           <div className="lg:col-span-2" data-aos="fade-left">
-            <div className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-gray-200/50 dark:border-gray-700/50 h-full">
+            <HoverCard className="p-8 h-full">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
                 Biography
               </h3>
@@ -62,7 +63,7 @@ export default function About() {
                   When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or learning about the latest trends in web development and design.
                 </p>
               </div>
-            </div>
+            </HoverCard>
           </div>
         </div>
 
