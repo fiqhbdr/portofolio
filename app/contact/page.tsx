@@ -3,7 +3,6 @@
 import { useState, useRef } from 'react';
 import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import emailjs from '@emailjs/browser';
-import { HoverCard } from '@/components/ui/card-hover-effect';
 
 export default function Contact() {
   const formRef = useRef<HTMLFormElement>(null);
@@ -87,7 +86,7 @@ export default function Contact() {
           {/* Contact Info */}
           <div className="space-y-8" data-aos="fade-right">
             {/* Email */}
-            <HoverCard className="p-6">
+            <div className="rounded-2xl border border-gray-200/50 dark:border-gray-700/50 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm shadow-lg p-6">
               <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
                 <FaEnvelope className="text-blue-500" />
                 Contact Me
@@ -98,10 +97,10 @@ export default function Contact() {
               >
                 fiqihbadrian@gmail.com
               </a>
-            </HoverCard>
+            </div>
 
             {/* Social Media */}
-            <HoverCard className="p-6">
+            <div className="rounded-2xl border border-gray-200/50 dark:border-gray-700/50 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm shadow-lg p-6">
               <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">
                 Social Media
               </h3>
@@ -131,12 +130,12 @@ export default function Contact() {
                   <FaInstagram size={24} />
                 </a>
               </div>
-            </HoverCard>
+            </div>
           </div>
 
           {/* Contact Form */}
           <div data-aos="fade-left">
-            <HoverCard className="p-8">
+            <div className="rounded-2xl border border-gray-200/50 dark:border-gray-700/50 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm shadow-lg p-8">
             <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
               {status.type && (
                 <div className={`p-4 rounded-lg ${
@@ -205,7 +204,7 @@ export default function Contact() {
                 {isLoading ? 'Sending...' : 'Send Message'}
               </button>
             </form>
-          </HoverCard>
+          </div>
           </div>
         </div>
       </div>
