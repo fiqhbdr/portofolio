@@ -78,7 +78,7 @@ const pinnedRepos: Repository[] = [
 
 export default function ProjectsSection() {
   return (
-    <section className='py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 via-purple-50/50 to-purple-50 dark:from-slate-900 dark:via-gray-900 dark:to-gray-900'>
+    <section id="project" className='py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 via-purple-50/50 to-purple-50 dark:from-slate-900 dark:via-gray-900 dark:to-gray-900'>
       <div className="container mx-auto max-w-7xl">
         <h2 className='text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center flex justify-center items-center gap-3 mb-10 transition-colors' data-aos="fade-up">
           My Projects <FaGithub />

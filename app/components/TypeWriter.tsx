@@ -12,42 +12,42 @@ interface TypeWriterProps {
 export default function TypeWriter({ texts, speed = 100, delay = 2000, className = '' }: TypeWriterProps) {
   const [displayText, setDisplayText] = useState('');
   const [textIndex, setTextIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
   const [charIndex, setCharIndex] = useState(0);
+  const [isComplete, setIsComplete] = useState(false);
 
   useEffect(() => {
+    // Jika sudah selesai semua text, berhenti
+    if (isComplete) return;
+
     const currentText = texts[textIndex];
     
     const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        // Typing
-        if (charIndex < currentText.length) {
-          setDisplayText(currentText.substring(0, charIndex + 1));
-          setCharIndex(charIndex + 1);
-        } else {
-          // Wait before deleting
-          setTimeout(() => setIsDeleting(true), delay);
-        }
+      // Typing
+      if (charIndex < currentText.length) {
+        setDisplayText(currentText.substring(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
       } else {
-        // Deleting
-        if (charIndex > 0) {
-          setDisplayText(currentText.substring(0, charIndex - 1));
-          setCharIndex(charIndex - 1);
+        // Cek apakah ini text terakhir
+        if (textIndex === texts.length - 1) {
+          // Text terakhir sudah selesai, set complete
+          setIsComplete(true);
         } else {
-          // Move to next text
-          setIsDeleting(false);
-          setTextIndex((textIndex + 1) % texts.length);
+          // Masih ada text lain, tunggu delay lalu lanjut ke text berikutnya
+          setTimeout(() => {
+            setTextIndex(textIndex + 1);
+            setCharIndex(0);
+          }, delay);
         }
       }
-    }, isDeleting ? speed / 2 : speed);
+    }, speed);
 
     return () => clearTimeout(timeout);
-  }, [charIndex, isDeleting, textIndex, texts, speed, delay]);
+  }, [charIndex, textIndex, texts, speed, delay, isComplete]);
 
   return (
     <span className={className}>
       {displayText}
-      <span className="animate-pulse">|</span>
+      {!isComplete && <span className="animate-pulse">|</span>}
     </span>
   );
 }
