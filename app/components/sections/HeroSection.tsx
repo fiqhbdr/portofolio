@@ -58,6 +58,7 @@ export default function HeroSection() {
               className="rounded-full shadow-lg"
               priority
               quality={85}
+              sizes="(max-width: 1024px) 0vw, 280px"
             />
           </div>
         </div>

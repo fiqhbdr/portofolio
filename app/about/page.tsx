@@ -79,6 +79,7 @@ export default function About() {
                   fill
                   className="object-cover relative z-[1]"
                   priority
+                  sizes="(max-width: 768px) 100vw, 400px"
                 />
                 
                 {/* Overlay gradient for better text visibility */}

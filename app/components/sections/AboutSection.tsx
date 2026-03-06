@@ -73,7 +73,8 @@ export default function AboutSection() {
                   alt="Fiqih Badrian"
                   fill
                   className="object-cover relative z-[1]"
-                  priority
+                  loading="lazy"
+                  sizes="(max-width: 768px) 100vw, 400px"
                 />
                 
                 {/* Overlay gradient for better text visibility */}

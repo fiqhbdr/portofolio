@@ -11,13 +11,13 @@ export default function CertificateSection() {
         <div className='flex flex-wrap justify-center gap-6'>
           <Link href="https://www.dicoding.com/certificates/KEXL21390ZG2" target='_blank' className='w-full max-w-sm'>
             <div className='bg-white dark:bg-[#1e2a47] p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300'>
-              <Image src="/images/dicoding1/dicoding1_page-0001.jpg" width={300} height={200} alt="Certificate Dasar AI" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75}/>
+              <Image src="/images/dicoding1/dicoding1_page-0001.jpg" width={300} height={200} alt="Certificate Dasar AI" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75} sizes="(max-width: 768px) 100vw, 300px"/>
               <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center transition-colors'>Dicoding - Dasar AI</h3>
             </div>
           </Link>
           <Link href="https://www.dicoding.com/certificates/N9ZO28M1RPG5" target='_blank' className='w-full max-w-sm'>
             <div className='bg-white dark:bg-[#1e2a47] p-6 rounded-lg shadow-md hover:shadow-xl transition-all duration-300'>
-              <Image src="/images/dicoding1/dicoding1_page-0002.jpg" width={300} height={200} alt="Certificate Dicoding" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75}/>
+              <Image src="/images/dicoding1/dicoding1_page-0002.jpg" width={300} height={200} alt="Certificate Dicoding" className='rounded-lg w-full h-auto mb-4' loading="lazy" quality={75} sizes="(max-width: 768px) 100vw, 300px"/>
               <h3 className='text-xl font-semibold text-gray-900 dark:text-white text-center transition-colors'>Dicoding Certificate</h3>
             </div>
           </Link>
