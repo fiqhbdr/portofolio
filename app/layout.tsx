@@ -7,7 +7,7 @@ import type { ReactNode } from "react";
 import { ThemeProvider } from "./components/ThemeProvider";
 
 export const metadata: Metadata = {
-  title: "Bian Portfolio",
+  title: "Fiqih Badrian Portfolio",
   description: "Website Portfolio",
   icons: {
     icon: "/logo.png",
