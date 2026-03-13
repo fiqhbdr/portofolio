@@ -74,7 +74,7 @@ export default function About() {
                 </div>
                 {/* Full Card Image */}
                 <Image
-                  src="/images/logo.png"
+                  src="/images/pikiw.jpg"
                   alt="Fiqih Badrian"
                   fill
                   className="object-cover relative z-[1]"

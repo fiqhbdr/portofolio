@@ -2,12 +2,18 @@ import "./globals.css";
 import NavbarWrapper from "./components/layout/NavbarWrapper";
 import Footer from "./components/layout/Footer";
 import AOSInit from "./components/AOSInit";
+import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { ThemeProvider } from "./components/ThemeProvider";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Bian Portfolio",
   description: "Website Portfolio",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
