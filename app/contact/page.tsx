@@ -78,7 +78,7 @@ export default function Contact() {
             Have a Project in Mind?
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!
+            I&apos;m always open to discussing new projects, creative ideas, or opportunities to be part of your vision. Feel free to reach out!
           </p>
         </div>
 

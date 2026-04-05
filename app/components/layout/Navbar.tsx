@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { HiMenu, HiX } from "react-icons/hi";
 import { FaSun, FaMoon } from "react-icons/fa";
 
@@ -16,12 +17,15 @@ type User = {
 type NavbarProps = {
   user: User | null;
   onLogout: () => void;
-  onLoginClick: () => void;
   theme?: string;
   onThemeToggle?: () => void;
 };
 
-export default function Navbar({ user = null, onLogout = () => {}, onLoginClick = () => {}, theme = 'dark', onThemeToggle = () => {} }: NavbarProps) {
+type Notification = {
+  isRead: boolean;
+};
+
+export default function Navbar({ user = null, onLogout = () => {}, theme = 'dark', onThemeToggle = () => {} }: NavbarProps) {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -30,10 +34,19 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setScrolled(window.scrollY > 80);
-      setAccountOpen(false);
-      setOpen(false);
+      if (ticking) return;
+      ticking = true;
+
+      requestAnimationFrame(() => {
+        const nextScrolled = window.scrollY > 80;
+        setScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
+        setAccountOpen((prev) => (prev ? false : prev));
+        setOpen((prev) => (prev ? false : prev));
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -47,8 +60,8 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
       try {
         const res = await fetch("/api/notifications");
         if (res.ok) {
-          const data = await res.json();
-          const unread = data.notifications.filter((n: any) => !n.isRead).length;
+          const data = (await res.json()) as { notifications?: Notification[] };
+          const unread = (data.notifications ?? []).filter((n) => !n.isRead).length;
           setUnreadCount(unread);
         }
       } catch (error) {
@@ -149,9 +162,11 @@ export default function Navbar({ user = null, onLogout = () => {}, onLoginClick 
                     }`}
                 >
                   {user.image ? (
-                    <img
+                    <Image
                       src={user.image}
                       alt="Profile"
+                      width={40}
+                      height={40}
                       className="w-full h-full object-cover"
                     />
                   ) : (

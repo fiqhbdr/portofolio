@@ -3,6 +3,7 @@ import { CSSProperties } from 'react';
 export interface ColorBendsProps {
   className?: string;
   style?: CSSProperties;
+  force?: boolean;
   rotation?: number;
   speed?: number;
   colors?: string[];

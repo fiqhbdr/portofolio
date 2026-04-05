@@ -101,6 +101,7 @@ void main() {
 export default function ColorBends({
   className,
   style,
+  force = false,
   rotation = 45,
   speed = 0.2,
   colors = [],
@@ -118,14 +119,33 @@ export default function ColorBends({
   const rafRef = useRef(null);
   const materialRef = useRef(null);
   const resizeObserverRef = useRef(null);
+  const intersectionObserverRef = useRef(null);
+  const scrollTimeoutRef = useRef(null);
   const rotationRef = useRef(rotation);
   const autoRotateRef = useRef(autoRotate);
   const pointerTargetRef = useRef(new THREE.Vector2(0, 0));
   const pointerCurrentRef = useRef(new THREE.Vector2(0, 0));
   const pointerSmoothRef = useRef(8);
+  const isInViewRef = useRef(true);
+  const isScrollingRef = useRef(false);
 
   useEffect(() => {
     const container = containerRef.current;
+    if (!container) return;
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isSmallScreen = window.innerWidth < 1024;
+    const deviceMemory = navigator.deviceMemory || 0;
+    const hardwareThreads = navigator.hardwareConcurrency || 0;
+    const lowEndDevice = (deviceMemory > 0 && deviceMemory <= 4) || (hardwareThreads > 0 && hardwareThreads <= 4);
+
+    // Skip WebGL background on constrained devices to prevent heavy GPU load.
+    if (!force && (prefersReducedMotion || isSmallScreen || lowEndDevice)) return;
+
+    const webglProbe = document.createElement('canvas');
+    const hasWebGL = !!(webglProbe.getContext('webgl2') || webglProbe.getContext('webgl'));
+    if (!hasWebGL) return;
+
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
@@ -160,12 +180,12 @@ export default function ColorBends({
 
     const renderer = new THREE.WebGLRenderer({
       antialias: false,
-      powerPreference: 'high-performance',
+      powerPreference: 'low-power',
       alpha: true
     });
     rendererRef.current = renderer;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
     renderer.setClearColor(0x000000, transparent ? 0 : 1);
     renderer.domElement.style.width = '100%';
     renderer.domElement.style.height = '100%';
@@ -191,8 +211,44 @@ export default function ColorBends({
       window.addEventListener('resize', handleResize);
     }
 
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(
+        ([entry]) => {
+          isInViewRef.current = !!entry?.isIntersecting;
+        },
+        { threshold: 0.05 }
+      );
+      io.observe(container);
+      intersectionObserverRef.current = io;
+    }
+
+    const handleScroll = () => {
+      isScrollingRef.current = true;
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+      scrollTimeoutRef.current = window.setTimeout(() => {
+        isScrollingRef.current = false;
+      }, 120);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    let lastRenderTime = 0;
+
     const loop = () => {
+      const now = performance.now();
+      const FRAME_INTERVAL_MS = 1000 / 24;
+
+      // Keep RAF alive but skip expensive render work if not visible.
+      if (document.hidden || !isInViewRef.current || isScrollingRef.current || now - lastRenderTime < FRAME_INTERVAL_MS) {
+        rafRef.current = requestAnimationFrame(loop);
+        return;
+      }
+      lastRenderTime = now;
+
       const dt = clock.getDelta();
+
       const elapsed = clock.elapsedTime;
       material.uniforms.uTime.value = elapsed;
 
@@ -215,7 +271,12 @@ export default function ColorBends({
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       if (resizeObserverRef.current) resizeObserverRef.current.disconnect();
+      if (intersectionObserverRef.current) intersectionObserverRef.current.disconnect();
       else window.removeEventListener('resize', handleResize);
+      if (scrollTimeoutRef.current !== null) {
+        window.clearTimeout(scrollTimeoutRef.current);
+      }
+      window.removeEventListener('scroll', handleScroll);
       geometry.dispose();
       material.dispose();
       renderer.dispose();
@@ -223,7 +284,7 @@ export default function ColorBends({
         container.removeChild(renderer.domElement);
       }
     };
-  }, [frequency, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
+  }, [force, frequency, mouseInfluence, noise, parallax, scale, speed, transparent, warpStrength]);
 
   useEffect(() => {
     const material = materialRef.current;
@@ -285,7 +346,7 @@ export default function ColorBends({
       pointerTargetRef.current.set(x, y);
     };
 
-    container.addEventListener('pointermove', handlePointerMove);
+    container.addEventListener('pointermove', handlePointerMove, { passive: true });
     return () => {
       container.removeEventListener('pointermove', handlePointerMove);
     };

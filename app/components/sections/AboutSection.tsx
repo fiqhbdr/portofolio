@@ -1,16 +1,59 @@
 "use client";
 
-import { useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { HoverCard } from '@/components/ui/card-hover-effect';
 
 export default function AboutSection() {
-  const [rotateX, setRotateX] = useState(0);
-  const [rotateY, setRotateY] = useState(0);
   const cardRef = useRef<HTMLDivElement>(null);
+  const tiltRef = useRef<HTMLDivElement>(null);
+  const rafRef = useRef<number | null>(null);
+  const currentRef = useRef({ x: 0, y: 0 });
+  const targetRef = useRef({ x: 0, y: 0 });
+  const interactiveRef = useRef(true);
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouchDevice = navigator.maxTouchPoints > 0;
+    interactiveRef.current = !prefersReducedMotion && !isTouchDevice;
+
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
+
+  const animateTilt = () => {
+    const tiltEl = tiltRef.current;
+    if (!tiltEl) {
+      rafRef.current = null;
+      return;
+    }
+
+    const damping = 0.14;
+    currentRef.current.x += (targetRef.current.x - currentRef.current.x) * damping;
+    currentRef.current.y += (targetRef.current.y - currentRef.current.y) * damping;
+
+    const x = currentRef.current.x;
+    const y = currentRef.current.y;
+    tiltEl.style.transform = `rotateX(${x}deg) rotateY(${y}deg)`;
+
+    if (Math.abs(targetRef.current.x - x) < 0.05 && Math.abs(targetRef.current.y - y) < 0.05) {
+      rafRef.current = null;
+      return;
+    }
+
+    rafRef.current = requestAnimationFrame(animateTilt);
+  };
+
+  const startAnimation = () => {
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(animateTilt);
+  };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!interactiveRef.current) return;
     if (!cardRef.current) return;
     
     const card = cardRef.current;
@@ -21,16 +64,15 @@ export default function AboutSection() {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
     
-    const rotateXValue = ((y - centerY) / centerY) * 10;
-    const rotateYValue = ((x - centerX) / centerX) * -10;
-    
-    setRotateX(rotateXValue);
-    setRotateY(rotateYValue);
+    targetRef.current.x = ((y - centerY) / centerY) * 10;
+    targetRef.current.y = ((x - centerX) / centerX) * -10;
+    startAnimation();
   };
 
   const handleMouseLeave = () => {
-    setRotateX(0);
-    setRotateY(0);
+    targetRef.current.x = 0;
+    targetRef.current.y = 0;
+    startAnimation();
   };
 
   return (
@@ -57,10 +99,12 @@ export default function AboutSection() {
               onMouseLeave={handleMouseLeave}
             >
               <div
+                ref={tiltRef}
                 className="relative w-full h-full transition-all duration-300 ease-out rounded-xl overflow-hidden shadow-xl hover:shadow-2xl border border-gray-200/30 dark:border-gray-700/30"
                 style={{
-                  transform: `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+                  transform: 'rotateX(0deg) rotateY(0deg)',
                   transformStyle: 'preserve-3d',
+                  willChange: 'transform',
                 }}
               >
                 {/* Animated gradient border on hover - very subtle */}
@@ -98,10 +142,11 @@ export default function AboutSection() {
                   <span className="text-gray-900 dark:text-white font-semibold text-base">
                     Contact
                   </span>
-                  <Link href="/contact">
-                    <button className="bg-gray-800/90 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium text-sm">
-                      Contact Me
-                    </button>
+                  <Link
+                    href="/contact"
+                    className="bg-gray-800/90 hover:bg-gray-700 text-white px-6 py-2 rounded-lg transition-colors font-medium text-sm"
+                  >
+                    Contact Me
                   </Link>
                 </div>
               </div>
@@ -130,13 +175,13 @@ export default function AboutSection() {
                 </h3>
                 <div className="space-y-4 text-gray-700 dark:text-gray-300 leading-relaxed">
                 <p>
-                  Hi! I'm Fiqih Badrian, a passionate <strong>Front End Developer</strong> with a love for creating beautiful and functional web experiences. I specialize in building modern, responsive websites using the latest technologies.
+                  Hi! I&apos;m Fiqih Badrian, a passionate <strong>Front End Developer</strong> with a love for creating beautiful and functional web experiences. I specialize in building modern, responsive websites using the latest technologies.
                 </p>
                 <p>
                   My journey in web development started with a curiosity about how websites work, and it has grown into a passion for crafting digital solutions that make a difference. I believe in writing clean, maintainable code and creating interfaces that users love.
                 </p>
                 <p>
-                  When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or learning about the latest trends in web development and design.
+                  When I&apos;m not coding, you can find me exploring new technologies, contributing to open source projects, or learning about the latest trends in web development and design.
                 </p>
               </div>
               </div>
