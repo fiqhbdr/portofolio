@@ -1,0 +1,22 @@
+
+> portofolio-main@0.1.0 build
+> next build
+
+▲ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 15.8s
+  Running TypeScript ...
+Failed to compile.
+
+./components/three/ThreeCard.tsx:12:22
+Type error: Cannot find namespace 'THREE'.
+
+[0m [90m 10 |[39m
+ [90m 11 |[39m [36mexport[39m [36mdefault[39m [36mfunction[39m [33mThreeCard[39m({ width [33m=[39m [35m2[39m[33m,[39m height [33m=[39m [35m2[39m }[33m:[39m [33mProps[39m) {
+[31m[1m>[22m[39m[90m 12 |[39m   [36mconst[39m ref [33m=[39m useRef[33m<[39m[33mTHREE[39m[33m.[39m[33mGroup[39m [33m|[39m [36mnull[39m[33m>[39m([36mnull[39m)[33m;[39m
+ [90m    |[39m                      [31m[1m^[22m[39m
+ [90m 13 |[39m   [36mconst[39m pointer [33m=[39m useRef[33m<[39m[number[33m,[39m number][33m>[39m([[35m0[39m[33m,[39m [35m0[39m])[33m;[39m
+ [90m 14 |[39m   [36mconst[39m pendingPointer [33m=[39m useRef[33m<[39m[number[33m,[39m number] [33m|[39m [36mnull[39m[33m>[39m([36mnull[39m)[33m;[39m
+ [90m 15 |[39m   [36mconst[39m scheduled [33m=[39m useRef[33m<[39m[33mboolean[39m[33m>[39m([36mfalse[39m)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
