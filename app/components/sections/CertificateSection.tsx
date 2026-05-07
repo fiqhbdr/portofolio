@@ -9,7 +9,8 @@ export default function CertificateSection() {
       url: "https://www.hackerrank.com/certificates/be32de179670",
       credentialId: "be32de179670",
       issued: "May 2026",
-      skills: "SQL"
+      skills: "SQL",
+      bgColor: "bg-purple-500 dark:bg-purple-700"
     },
     {
       name: "Introduction to Cyber Security",
@@ -17,7 +18,8 @@ export default function CertificateSection() {
       url: "https://simpli.link/cyber-security",
       credentialId: "10194254",
       issued: "May 2026",
-      skills: "Cyber Security"
+      skills: "Cyber Security",
+      bgColor: "bg-pink-500 dark:bg-pink-700"
     },
     {
       name: "Belajar Dasar Pemrograman Web",
@@ -64,8 +66,8 @@ export default function CertificateSection() {
                   />
                 )}
                 {!cert.image && (
-                  <div className='bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900 dark:to-pink-900 rounded-lg w-full h-32 mb-4 flex items-center justify-center'>
-                    <p className='text-gray-600 dark:text-gray-300 font-semibold text-center text-sm'>{cert.organization}</p>
+                  <div className={`${cert.bgColor} rounded-lg w-full h-32 mb-4 flex items-center justify-center`}>
+                    <p className='text-white font-semibold text-center text-sm'>{cert.organization}</p>
                   </div>
                 )}
                 <h3 className='text-lg font-semibold text-gray-900 dark:text-white transition-colors mb-2'>{cert.name}</h3>
