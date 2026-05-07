@@ -1,6 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import CanvasWrapper from "@/components/three/CanvasWrapper";
+import ThreeCard from "@/components/three/ThreeCard";
 
 export const Card = ({
   className,
@@ -74,6 +76,14 @@ export const HoverCard = ({
         className
       )}
     >
+      {/* Three.js canvas overlay for 3D hover effect */}
+      <div className="absolute inset-0 pointer-events-none">
+        <CanvasWrapper className="w-full h-full">
+          <ambientLight intensity={0.6} />
+          <directionalLight position={[5, 5, 5]} intensity={0.6} />
+          <ThreeCard />
+        </CanvasWrapper>
+      </div>
       {/* Animated gradient border on hover */}
       <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
         <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-30" />

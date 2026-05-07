@@ -2,7 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
-import ColorBends from '@/components/ColorBends';
+import CanvasWrapper from '@/components/three/CanvasWrapper';
+import ColorBendsR3F from '@/components/three/ColorBendsR3F';
 import TypeWriter from '../TypeWriter';
 import Link from 'next/link';
 
@@ -69,20 +70,24 @@ export default function HeroSection() {
       </div>
       {shouldRenderColorBends && (
         <div className="absolute inset-0 w-full h-full">
-          <ColorBends
-            force={effectsMode === 'on'}
-            rotation={45}
-            speed={0.2}
-            colors={["#29fbff", "#f4435e"]}
-            transparent
-            autoRotate={0}
-            scale={1}
-            frequency={1}
-            warpStrength={1}
-            mouseInfluence={0.8}
-            parallax={0.5}
-            noise={0.08}
-          />
+          <CanvasWrapper className="w-full h-full">
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[5, 5, 5]} intensity={0.6} />
+            <ColorBendsR3F
+              force={effectsMode === 'on'}
+              rotation={45}
+              speed={0.2}
+              colors={["#29fbff", "#f4435e"]}
+              transparent
+              autoRotate={0}
+              scale={1}
+              frequency={1}
+              warpStrength={1}
+              mouseInfluence={0.8}
+              parallax={0.5}
+              noise={0.08}
+            />
+          </CanvasWrapper>
         </div>
       )}
       <div className="container mx-auto max-w-7xl relative z-10">

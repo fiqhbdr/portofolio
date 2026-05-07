@@ -3,6 +3,8 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import CanvasWrapper from '@/components/three/CanvasWrapper';
+import ThreeCard from '@/components/three/ThreeCard';
 
 export default function AboutSection() {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -107,6 +109,14 @@ export default function AboutSection() {
                   willChange: 'transform',
                 }}
               >
+                  {/* Three.js subtle background */}
+                  <div className="absolute inset-0 pointer-events-none z-0">
+                    <CanvasWrapper className="w-full h-full">
+                      <ambientLight intensity={0.6} />
+                      <directionalLight position={[5,5,5]} intensity={0.6} />
+                      <ThreeCard />
+                    </CanvasWrapper>
+                  </div>
                 {/* Animated gradient border on hover - very subtle */}
                 <div className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none z-0">
                   <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-10" />
