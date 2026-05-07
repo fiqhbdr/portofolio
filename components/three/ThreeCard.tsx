@@ -11,6 +11,8 @@ type Props = {
 export default function ThreeCard({ width = 2, height = 2 }: Props) {
   const ref = useRef<THREE.Group | null>(null);
   const pointer = useRef<[number, number]>([0, 0]);
+  const pendingPointer = useRef<[number, number] | null>(null);
+  const scheduled = useRef<boolean>(false);
 
   useFrame(() => {
     if (!ref.current) return;
@@ -25,7 +27,15 @@ export default function ThreeCard({ width = 2, height = 2 }: Props) {
         onPointerMove={(e) => {
           const nx = (e.clientX / window.innerWidth - 0.5) * 2;
           const ny = (e.clientY / window.innerHeight - 0.5) * 2;
-          pointer.current = [nx, ny];
+          pendingPointer.current = [nx, ny];
+          if (!scheduled.current) {
+            scheduled.current = true;
+            requestAnimationFrame(() => {
+              if (pendingPointer.current) pointer.current = pendingPointer.current;
+              pendingPointer.current = null;
+              scheduled.current = false;
+            });
+          }
         }}
         onPointerLeave={() => {
           pointer.current = [0, 0];

@@ -102,6 +102,8 @@ export default function ColorBendsR3F(props: any) {
   const meshRef = useRef<THREE.Mesh | null>(null);
   const materialRef = useRef<any>(null);
   const { size, gl } = useThree();
+  const pendingPointer = useRef<[number, number] | null>(null);
+  const scheduled = useRef<boolean>(false);
 
   useEffect(() => {
     if (!materialRef.current) return;
@@ -149,7 +151,18 @@ export default function ColorBendsR3F(props: any) {
       const rect = el.getBoundingClientRect();
       const x = ((e.clientX - rect.left) / (rect.width || 1)) * 2 - 1;
       const y = -(((e.clientY - rect.top) / (rect.height || 1)) * 2 - 1);
-      if (materialRef.current) materialRef.current.uniforms.uPointer.value.set(x, y);
+      pendingPointer.current = [x, y];
+      if (!scheduled.current) {
+        scheduled.current = true;
+        requestAnimationFrame(() => {
+          if (pendingPointer.current && materialRef.current) {
+            const [px, py] = pendingPointer.current;
+            materialRef.current.uniforms.uPointer.value.set(px, py);
+          }
+          pendingPointer.current = null;
+          scheduled.current = false;
+        });
+      }
     };
     el.addEventListener('pointermove', handle, { passive: true });
     return () => el.removeEventListener('pointermove', handle);
