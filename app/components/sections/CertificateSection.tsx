@@ -27,7 +27,7 @@ const certificates: Certificate[] = [
   {
     name: "Introduction to Cyber Security",
     organization: "Simplilearn",
-    url: "https://simpli.link/cyber-security",
+    url: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxMjEzIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAxOTQyNTRfMTA0NzkzOTNfMTc3ODA0Mzg0MzI2OS5wbmciLCJ1c2VybmFtZSI6IkZpcWloIEJhZHJpYW4ifQ%3D%3D&utm_source=shared-certificate&utm_medium=lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3736%2FIntroduction-to-Cyber-Security%2Fcertificate%2Fdownload-skillup&%24web_only=true&_branch_match_id=1580467866977527482&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k%2FVT7IwcIvMT3IMNUqyrytKTUstKsrMS49PKsovL04tsvUBqkpN8cwDAL1E0cJBAAAA",
     credentialId: "10194254",
     issued: "May 2026",
     image: "/images/Certified/cyber.png",
