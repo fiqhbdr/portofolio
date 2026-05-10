@@ -1,8 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import CanvasWrapper from "@/components/three/CanvasWrapper";
-import ThreeCard from "@/components/three/ThreeCard";
 
 export const Card = ({
   className,
@@ -72,30 +70,22 @@ export const HoverCard = ({
   return (
     <div
       className={cn(
-        "group relative overflow-hidden rounded-2xl border border-gray-200/50 dark:border-gray-700/50 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm shadow-lg transition-all duration-500 hover:shadow-2xl",
+        "group relative overflow-hidden rounded-2xl border border-gray-200/50 dark:border-gray-700/50 bg-white/80 dark:bg-gray-800/80 shadow-lg transition-shadow duration-500 hover:shadow-2xl",
         className
       )}
     >
-      {/* Three.js canvas overlay for 3D hover effect */}
-      <div className="absolute inset-0 pointer-events-none">
-        <CanvasWrapper className="w-full h-full">
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[5, 5, 5]} intensity={0.6} />
-          <ThreeCard />
-        </CanvasWrapper>
-      </div>
       {/* Animated gradient border on hover */}
-      <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-30" />
+      <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none">
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 opacity-20" />
       </div>
-      
+
       {/* Content */}
-      <div className="relative z-10 h-full transform transition-transform duration-500 group-hover:scale-[0.98]">
+      <div className="relative z-10 h-full transition-transform duration-500 group-hover:scale-[0.98]">
         {children}
       </div>
-      
+
       {/* Shine effect on hover */}
-      <div className="absolute inset-0 -translate-x-full transform transition-transform duration-1000 group-hover:translate-x-full">
+      <div className="absolute inset-0 -translate-x-full transition-transform duration-1000 group-hover:translate-x-full pointer-events-none">
         <div className="h-full w-1/3 bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-12" />
       </div>
     </div>

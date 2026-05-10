@@ -3,8 +3,6 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import CanvasWrapper from '@/components/three/CanvasWrapper';
-import ThreeCard from '@/components/three/ThreeCard';
 
 export default function AboutSection() {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -102,24 +100,16 @@ export default function AboutSection() {
             >
               <div
                 ref={tiltRef}
-                className="relative w-full h-full transition-all duration-300 ease-out rounded-xl overflow-hidden shadow-xl hover:shadow-2xl border border-gray-200/30 dark:border-gray-700/30"
+                className="relative w-full h-full transition-shadow duration-300 ease-out rounded-xl overflow-hidden shadow-xl hover:shadow-2xl border border-gray-200/30 dark:border-gray-700/30"
                 style={{
                   transform: 'rotateX(0deg) rotateY(0deg)',
                   transformStyle: 'preserve-3d',
                   willChange: 'transform',
                 }}
               >
-                  {/* Three.js subtle background */}
-                  <div className="absolute inset-0 pointer-events-none z-0">
-                    <CanvasWrapper className="w-full h-full">
-                      <ambientLight intensity={0.6} />
-                      <directionalLight position={[5,5,5]} intensity={0.6} />
-                      <ThreeCard />
-                    </CanvasWrapper>
-                  </div>
                 {/* Animated gradient border on hover - very subtle */}
                 <div className="absolute inset-0 rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none z-0">
-                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-10" />
+                  <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 opacity-10" />
                 </div>
                 {/* Full Card Image */}
                 <Image
@@ -165,17 +155,12 @@ export default function AboutSection() {
 
           {/* Bio Section */}
           <div className="lg:col-span-2" data-aos="fade-left">
-            <div className="group relative overflow-hidden rounded-2xl border border-gray-200/30 dark:border-gray-700/30 bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm shadow-lg transition-all duration-300 hover:shadow-2xl p-8 h-full">
+            <div className="group relative overflow-hidden rounded-2xl border border-gray-200/30 dark:border-gray-700/30 bg-white/80 dark:bg-gray-800/80 shadow-lg transition-shadow duration-300 hover:shadow-2xl p-8 h-full">
               {/* Animated gradient border on hover - very subtle */}
               <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none z-0">
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 blur-xl opacity-10" />
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 opacity-10" />
               </div>
-              
-              {/* Shine effect on hover */}
-              <div className="absolute inset-0 -translate-x-full transform transition-transform duration-1000 group-hover:translate-x-full z-[1] pointer-events-none">
-                <div className="h-full w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12" />
-              </div>
-              
+
               <div className="relative z-10">
                 <h2 className="text-xl md:text-base font-semibold tracking-wider text-blue-600 dark:text-blue-400 mb-4 uppercase">
                   About Me

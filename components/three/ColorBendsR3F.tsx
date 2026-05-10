@@ -104,6 +104,7 @@ export default function ColorBendsR3F(props: any) {
   const { size, gl } = useThree();
   const pendingPointer = useRef<[number, number] | null>(null);
   const scheduled = useRef<boolean>(false);
+  const isActiveRef = useRef<boolean>(true);
 
   useEffect(() => {
     if (!materialRef.current) return;
@@ -129,6 +130,7 @@ export default function ColorBendsR3F(props: any) {
 
   useFrame((state, delta) => {
     if (!materialRef.current) return;
+    if (!isActiveRef.current) return;
     materialRef.current.uniforms.uTime.value += delta;
     materialRef.current.uniforms.uCanvas.value.set(size.width, size.height);
     materialRef.current.uniforms.uSpeed.value = props.speed ?? 0.2;
@@ -166,6 +168,38 @@ export default function ColorBendsR3F(props: any) {
     };
     el.addEventListener('pointermove', handle, { passive: true });
     return () => el.removeEventListener('pointermove', handle);
+  }, [gl]);
+
+  useEffect(() => {
+    const el = gl?.domElement || null;
+    if (!el || typeof window === 'undefined') return;
+
+    const parent = el.parentElement;
+
+    const handleVisibility = () => {
+      if (document.hidden) isActiveRef.current = false;
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+
+    let io: IntersectionObserver | null = null;
+    if (parent && 'IntersectionObserver' in window) {
+      io = new IntersectionObserver(
+        ([entry]) => {
+          if (document.hidden) {
+            isActiveRef.current = false;
+            return;
+          }
+          isActiveRef.current = !!entry?.isIntersecting;
+        },
+        { threshold: 0.05 }
+      );
+      io.observe(parent);
+    }
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility);
+      if (io) io.disconnect();
+    };
   }, [gl]);
 
   const uniforms = {

@@ -67,10 +67,18 @@ export default function CanvasWrapper({ children, className, force = false }: Pr
   return (
     <div className={className} style={{ width: "100%", height: "100%" }}>
       <Canvas
-        gl={{ antialias: false, alpha: true, powerPreference: "low-power" }}
+        gl={{ antialias: false, alpha: true, powerPreference: "low-power", failIfMajorPerformanceCaveat: false, preserveDrawingBuffer: false }}
         style={{ width: "100%", height: "100%" }}
         camera={{ position: [0, 0, 5], fov: 50 }}
         dpr={dpr}
+        frameloop="always"
+        onCreated={({ gl }) => {
+          const canvas = gl.domElement;
+          const handleLost = (e: Event) => {
+            e.preventDefault();
+          };
+          canvas.addEventListener('webglcontextlost', handleLost, false);
+        }}
       >
         {children}
       </Canvas>
