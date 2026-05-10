@@ -28,6 +28,12 @@ export default function CanvasWrapper({ children, className, force = false }: Pr
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    if (force) {
+      const hasWebGLForced = probeWebGL();
+      setShouldRender(hasWebGLForced);
+      return;
+    }
+
     const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isSmallScreen = window.innerWidth < 1024;
     const deviceMemory = (navigator as any).deviceMemory || 0;
@@ -36,27 +42,13 @@ export default function CanvasWrapper({ children, className, force = false }: Pr
 
     const hasWebGL = probeWebGL();
 
-    // Limit number of active canvases to avoid exhausting WebGL contexts.
-    (window as any).__R3F_CANVAS_COUNT = (window as any).__R3F_CANVAS_COUNT || 0;
-    const tooManyCanvases = (window as any).__R3F_CANVAS_COUNT >= 1;
-
-    if (!force && (prefersReducedMotion || isSmallScreen || lowEndDevice || !hasWebGL || tooManyCanvases)) {
+    if (prefersReducedMotion || isSmallScreen || lowEndDevice || !hasWebGL) {
       setShouldRender(false);
       return;
     }
 
     setShouldRender(true);
   }, [force]);
-
-  useEffect(() => {
-    if (!shouldRender) return;
-    (window as any).__R3F_CANVAS_COUNT = (window as any).__R3F_CANVAS_COUNT || 0;
-    (window as any).__R3F_CANVAS_COUNT += 1;
-    return () => {
-      (window as any).__R3F_CANVAS_COUNT -= 1;
-      if ((window as any).__R3F_CANVAS_COUNT < 0) (window as any).__R3F_CANVAS_COUNT = 0;
-    };
-  }, [shouldRender]);
 
   if (!shouldRender) {
     return <div className={className} style={{ width: '100%', height: '100%' }} />;

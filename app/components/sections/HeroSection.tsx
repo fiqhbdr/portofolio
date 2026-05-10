@@ -70,7 +70,7 @@ export default function HeroSection() {
       </div>
       {shouldRenderColorBends && (
         <div className="absolute inset-0 w-full h-full">
-          <CanvasWrapper className="w-full h-full">
+          <CanvasWrapper className="w-full h-full" force={effectsMode === 'on'}>
             <ambientLight intensity={0.6} />
             <directionalLight position={[5, 5, 5]} intensity={0.6} />
             <ColorBendsR3F
