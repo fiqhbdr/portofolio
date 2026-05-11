@@ -68,21 +68,26 @@ const pinnedRepos: Repository[] = [
     forkCount: 0,
   },
   {
+    name: 'Soalin-Quiz',
+    description: 'Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.',
+    url: 'https://github.com/fiqihbadrian/Soalin-Quiz',
+    previews: [
+      '/images/projects/dekstop.png',
+      '/images/projects/login.png',
+      '/images/projects/upload.png'
+    ],
+    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/Soalin-Quiz',
+    primaryLanguage: { name: 'JavaScript', color: '#f1e05a' },
+    stargazerCount: 0,
+    forkCount: 0,
+  },
+  {
     name: 'Python-Game-Loncat',
     description: 'Game sederhana yang di buat menggunakan bahasa python dan package pygame.',
     url: 'https://github.com/fiqihbadrian/Python-Game-Loncat',
     openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/Python-Game-Loncat',
     primaryLanguage: { name: 'Python', color: '#3572A5' },
     stargazerCount: 1,
-    forkCount: 0,
-  },
-  {
-    name: 'cemil',
-    description: 'Website berbasis Next.js menggunakan DaisyUI.',
-    url: 'https://github.com/fiqihbadrian/cemil',
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/cemil',
-    primaryLanguage: { name: 'JavaScript', color: '#f1e05a' },
-    stargazerCount: 2,
     forkCount: 0,
   },
   {
