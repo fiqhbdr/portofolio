@@ -126,9 +126,9 @@ function Slideshow({ slides }: { slides: string[] }) {
   );
 }
 
-function ProjectCard({ p, delay }: { p: any; delay: number }) {
+function ProjectCard({ p }: { p: any; delay: number }) {
   return (
-    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block reveal" style={{ transitionDelay: `${delay}ms` }}>
+    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block" style={{ animation: `fadeIn .5s ease-out both` }}>
       <div className="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
         {p.slides ? (
           <Slideshow slides={p.slides} />
