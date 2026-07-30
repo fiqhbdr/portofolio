@@ -1,346 +1,107 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { HiMenu, HiX } from "react-icons/hi";
-import { FaSun, FaMoon } from "react-icons/fa";
+import { useState, useEffect } from "react";
 
-type User = {
-  id: number;
-  email: string;
-  name?: string;
-  role: string;
-  image?: string;
-};
+const sections = ["home", "about", "projects", "certificates", "contact"];
 
-type NavbarProps = {
-  user: User | null;
-  onLogout: () => void;
-  theme?: string;
-  onThemeToggle?: () => void;
-};
-
-type Notification = {
-  isRead: boolean;
-};
-
-export default function Navbar({ user = null, onLogout = () => {}, theme = 'dark', onThemeToggle = () => {} }: NavbarProps) {
-  const [open, setOpen] = useState(false);
-  const [accountOpen, setAccountOpen] = useState(false);
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [unreadCount, setUnreadCount] = useState(0);
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState("home");
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    let ticking = false;
+    const onScroll = () => {
+      const scrollY = window.scrollY;
+      setScrolled(scrollY > 60);
 
-    const handleScroll = () => {
-      if (ticking) return;
-      ticking = true;
-
-      requestAnimationFrame(() => {
-        const nextScrolled = window.scrollY > 80;
-        setScrolled((prev) => (prev === nextScrolled ? prev : nextScrolled));
-        setAccountOpen((prev) => (prev ? false : prev));
-        setOpen((prev) => (prev ? false : prev));
-        ticking = false;
-      });
+      // Scroll spy
+      let current = "home";
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (el && el.offsetTop - 120 <= scrollY) current = id;
+      }
+      setActive(current);
     };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-
-    const loadNotifications = async () => {
-      try {
-        const res = await fetch("/api/notifications");
-        if (res.ok) {
-          const data = (await res.json()) as { notifications?: Notification[] };
-          const unread = (data.notifications ?? []).filter((n) => !n.isRead).length;
-          setUnreadCount(unread);
-        }
-      } catch (error) {
-        console.error("Error loading notifications:", error);
-      }
-    };
-
-    loadNotifications();
-    const interval = setInterval(loadNotifications, 30000);
-    return () => clearInterval(interval);
-  }, [user]);
-
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(e.target as Node)
-      ) {
-        setAccountOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  const scrollTo = (id: string) => {
+    setActive(id);
+    setMobileOpen(false);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <>
-      {/* WRAPPER (STABIL) */}
-      <div className="fixed top-0 left-0 w-full z-50 flex justify-center pointer-events-none">
-        <nav
-          className={`pointer-events-auto transition-all duration-500 ease-out
-            flex items-center justify-between
-            ${
-              scrolled
-                ? "mt-4 mx-4 sm:mx-6 lg:mx-8 w-[calc(100%-2rem)] sm:w-[calc(100%-3rem)] lg:w-[calc(100%-4rem)] max-w-7xl rounded-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-md shadow-lg px-6 md:px-10 py-4"
-                : "w-full rounded-none bg-transparent px-6 md:px-10 py-4"
-            }`}
-        >
-          {/* LOGO */}
-          <Link
-            href="/"
-            className={`font-bold tracking-wide transition-all duration-500 hover:scale-110
-              ${
-                scrolled
-                  ? "text-white dark:text-white text-lg hover:text-blue-400"
-                  : "text-gray-900 dark:text-white text-xl md:text-2xl drop-shadow-lg hover:text-blue-600 dark:hover:text-blue-400"
-              }`}
-          >
-            BIAN
-          </Link>
+      <nav
+        className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+          scrolled ? "bg-[#0A0A0A]/80 nav-blur shadow-lg shadow-black/10" : "bg-transparent"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex items-center justify-between h-20">
+          <button onClick={() => scrollTo("home")} className="font-display text-2xl lg:text-3xl font-bold text-[#F5F1EA] hover:text-[#1EA5FF] transition-colors duration-300" style={{ textDecoration: "none" }}>
+            Fiqih<span className="text-[#FF2F4F]">.</span>
+          </button>
 
-          {/* DESKTOP MENU */}
-          <div className="hidden md:flex gap-8">
-            {["Home", "About", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                className={`font-medium transition-all duration-300 relative group
-                  ${
-                    scrolled
-                      ? "text-zinc-800 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
-                      : "text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 drop-shadow-md"
+          {/* Desktop links */}
+          <div className="hidden md:flex items-center gap-8">
+            {sections.map((id) => (
+              <button
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={`relative group text-sm font-medium tracking-wider uppercase transition-colors duration-300 font-mono-custom ${
+                  active === id ? "text-[#1EA5FF]" : "text-[#8D8D8D] hover:text-[#F5F1EA]"
+                }`}
+              >
+                {id === "home" ? "Home" : id.charAt(0).toUpperCase() + id.slice(1)}
+                <span
+                  className={`absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left ${
+                    active === id ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                   }`}
-              >
-                {item}
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 dark:bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-              </Link>
+                />
+              </button>
             ))}
           </div>
 
-          {/* RIGHT */}
-          <div className="flex items-center gap-3">
-            {/* THEME TOGGLE BUTTON */}
-            <button
-              onClick={onThemeToggle}
-              className={`hidden md:flex items-center justify-center w-10 h-10 rounded-full transition-all duration-300 hover:scale-110 hover:rotate-12 ${
-                scrolled
-                  ? "bg-zinc-100 dark:bg-zinc-700 text-zinc-800 dark:text-white hover:bg-zinc-200 dark:hover:bg-zinc-600"
-                  : "bg-white/90 dark:bg-white/20 text-gray-900 dark:text-white shadow-md hover:bg-white dark:hover:bg-white/30 hover:shadow-lg"
-              }`}
-              aria-label="Toggle theme"
-            >
-              {theme === 'dark' ? <FaSun className="text-lg" /> : <FaMoon className="text-lg" />}
-            </button>
-
-            {/* AUTH DESKTOP */}
-            {user ? (
-              <div ref={dropdownRef} className="hidden md:block relative">
-                {/* AVATAR ONLY */}
-                <button
-                  onClick={() => setAccountOpen(!accountOpen)}
-                  className={`w-10 h-10 rounded-full overflow-hidden flex items-center justify-center transition-all
-                    ${
-                      scrolled
-                        ? "bg-zinc-100 dark:bg-zinc-700"
-                        : "bg-white/20"
-                    }`}
-                >
-                  {user.image ? (
-                    <Image
-                      src={user.image}
-                      alt="Profile"
-                      width={40}
-                      height={40}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <span className="text-sm font-bold text-white">
-                      {(user.name || user.email)[0].toUpperCase()}
-                    </span>
-                  )}
-                </button>
-
-                {/* DROPDOWN */}
-                {accountOpen && (
-                  <div className="absolute right-0 mt-3 w-56 rounded-xl bg-white dark:bg-[#1a3d2a] shadow-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                    <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-700">
-                      <p className="text-sm font-semibold text-zinc-800 dark:text-white">
-                        {user.name || "Akun"}
-                      </p>
-                      <p className="text-xs text-zinc-500 truncate">
-                        {user.email}
-                      </p>
-                      <p className="text-xs mt-1 text-blue-600 font-medium">
-                        {user.role}
-                      </p>
-                    </div>
-
-                    <Link
-                      href="/profile?tab=orders"
-                      onClick={() => setAccountOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
-                      <span className="flex-1">Pesanan Saya</span>
-                    </Link>
-
-                    <Link
-                      href="/profile?tab=inbox"
-                      onClick={() => setAccountOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors relative"
-                    >
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                      </svg>
-                      <span className="flex-1">Inbox</span>
-                      {unreadCount > 0 && (
-                        <span className="bg-red-500 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                          {unreadCount}
-                        </span>
-                      )}
-                    </Link>
-
-                    <Link
-                      href="/profile"
-                      onClick={() => setAccountOpen(false)}
-                      className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                    >
-                      <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                      </svg>
-                      <span className="flex-1">Profil Saya</span>
-                    </Link>
-
-                    {user.role === "ADMIN" && (
-                      <Link
-                        href="/dashboard"
-                        onClick={() => setAccountOpen(false)}
-                        className="flex items-center gap-3 px-4 py-2.5 text-sm text-zinc-800 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                      >
-                        <svg className="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                        </svg>
-                        <span>Dashboard Admin</span>
-                      </Link>
-                    )}
-
-                    <button
-                      onClick={() => {
-                        setAccountOpen(false);
-                        setShowLogoutModal(true);
-                      }}
-                      className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : null}
-
-            {/* MOBILE BUTTON */}
-            <button
-              className={`md:hidden text-2xl ${
-                scrolled ? "text-zinc-800 dark:text-white" : "text-gray-900 dark:text-white"
-              }`}
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <HiX /> : <HiMenu />}
-            </button>
-          </div>
-        </nav>
-      </div>
-
-      {/* MOBILE MENU */}
-      {open && (
-        <div className="md:hidden fixed top-24 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md z-40 p-6 shadow-lg border-t border-gray-200 dark:border-gray-800">
-          <div className="flex flex-col gap-1">
-            {["Home", "About", "Contact"].map((item) => (
-              <Link
-                key={item}
-                href={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-                onClick={() => setOpen(false)}
-                className="block py-3 px-4 font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-              >
-                {item}
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-            <button
-              onClick={() => {
-                setOpen(false);
-                onThemeToggle();
-              }}
-              className="flex items-center gap-3 w-full py-3 px-4 font-medium text-gray-900 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors"
-            >
-              {theme === 'dark' ? (
-                <>
-                  <FaSun className="text-lg text-yellow-500" />
-                  <span>Light Mode</span>
-                </>
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="md:hidden text-[#F5F1EA] p-2 relative z-50"
+            aria-label="Toggle menu"
+            aria-expanded={mobileOpen}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <>
-                  <FaMoon className="text-lg text-blue-500" />
-                  <span>Dark Mode</span>
-                </>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
               )}
-            </button>
-          </div>
+            </svg>
+          </button>
         </div>
-      )}
+      </nav>
 
-      {/* LOGOUT CONFIRMATION MODAL */}
-      {showLogoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
-          <div className="bg-white dark:bg-[#1a3d2a] rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4 border border-zinc-200 dark:border-zinc-700">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
-                </svg>
-              </div>
-              <h3 className="text-lg font-bold text-zinc-900 dark:text-white">Konfirmasi Logout</h3>
-            </div>
-            <p className="text-zinc-600 dark:text-zinc-300 mb-6">
-              Apakah Anda yakin ingin keluar dari akun? Anda harus login kembali untuk mengakses fitur yang memerlukan autentikasi.
-            </p>
-            <div className="flex gap-3">
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div
+          className="md:hidden fixed inset-x-0 top-20 z-40 bg-[#0A0A0A]/95 nav-blur border-t border-[rgba(255,255,255,.05)]"
+          style={{ display: mobileOpen ? "block" : "none" }}
+        >
+          <div className="px-6 py-6 space-y-2">
+            {sections.map((id) => (
               <button
-                onClick={() => setShowLogoutModal(false)}
-                className="flex-1 px-4 py-2.5 rounded-lg border border-zinc-300 dark:border-zinc-600 text-zinc-700 dark:text-zinc-300 font-semibold hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                key={id}
+                onClick={() => scrollTo(id)}
+                className={`block w-full text-left py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors ${
+                  active === id
+                    ? "text-[#1EA5FF] bg-[rgba(30,165,255,.12)]"
+                    : "text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]"
+                }`}
               >
-                Batal
+                {id === "home" ? "Home" : id.charAt(0).toUpperCase() + id.slice(1)}
               </button>
-              <button
-                onClick={() => {
-                  setShowLogoutModal(false);
-                  onLogout();
-                }}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-red-600 text-white font-semibold hover:bg-red-700 transition-colors"
-              >
-                Ya, Logout
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       )}

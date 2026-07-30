@@ -1,136 +1,64 @@
 "use client";
 
-import { useEffect, useMemo, useState } from 'react';
-import Image from 'next/image';
-import CanvasWrapper from '@/components/three/CanvasWrapper';
-import ColorBendsR3F from '@/components/three/ColorBendsR3F';
-import TypeWriter from '../TypeWriter';
-import Link from 'next/link';
-
-type HeroEffectsMode = 'auto' | 'on' | 'off';
+import { useEffect } from "react";
 
 export default function HeroSection() {
-  const [effectsMode, setEffectsMode] = useState<HeroEffectsMode>('on');
-  const [canRunHeavyEffects, setCanRunHeavyEffects] = useState(false);
-
   useEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      const savedMode = window.localStorage.getItem('heroEffectsMode') as HeroEffectsMode | null;
-      if (savedMode === 'auto' || savedMode === 'on' || savedMode === 'off') {
-        setEffectsMode(savedMode);
-      } else {
-        window.localStorage.setItem('heroEffectsMode', 'on');
+    // Kinetic parallax
+    let ticking = false;
+    const kinetic = document.getElementById("heroKinetic");
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          if (kinetic) {
+            const scrolled = window.scrollY;
+            kinetic.style.transform = `translate(-50%, calc(-50% + ${scrolled * 0.15}px))`;
+          }
+          ticking = false;
+        });
+        ticking = true;
       }
-
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      const isSmallScreen = window.innerWidth < 1024;
-      const deviceMemory = (navigator as Navigator & { deviceMemory?: number }).deviceMemory || 0;
-      const hardwareThreads = navigator.hardwareConcurrency || 0;
-      const lowEndDevice = (deviceMemory > 0 && deviceMemory <= 4) || (hardwareThreads > 0 && hardwareThreads <= 4);
-
-      setCanRunHeavyEffects(!prefersReducedMotion && !isSmallScreen && !lowEndDevice);
-    });
-
-    return () => {
-      window.cancelAnimationFrame(frameId);
     };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const shouldRenderColorBends = useMemo(() => {
-    if (effectsMode === 'off') return false;
-    if (effectsMode === 'on') return true;
-    return canRunHeavyEffects;
-  }, [effectsMode, canRunHeavyEffects]);
-
-  const cycleEffectsMode = () => {
-    const nextMode: HeroEffectsMode = effectsMode === 'auto' ? 'on' : effectsMode === 'on' ? 'off' : 'auto';
-    setEffectsMode(nextMode);
-    window.localStorage.setItem('heroEffectsMode', nextMode);
-  };
-
-  const effectsLabel =
-    effectsMode === 'auto'
-      ? canRunHeavyEffects
-        ? 'Auto (active)'
-        : 'Auto (lite)'
-      : effectsMode === 'on'
-        ? 'On'
-        : 'Off';
-
   return (
-    <section className="min-h-screen flex items-center py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-b from-blue-50 via-purple-50 to-gray-50 dark:from-gray-950 dark:via-gray-900 dark:to-gray-900">
-      <div className="absolute top-24 right-4 sm:right-6 z-20">
-        <button
-          type="button"
-          onClick={cycleEffectsMode}
-          className="inline-flex items-center rounded-full border border-gray-300/70 dark:border-gray-600/80 bg-white/90 dark:bg-gray-900/80 backdrop-blur-sm px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-200 shadow-md hover:bg-white dark:hover:bg-gray-800 transition-colors"
-        >
-          Effects: {effectsLabel}
-        </button>
+    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+      <div className="orb orb-1"></div>
+      <div className="orb orb-2"></div>
+      <div className="hero-kinetic" id="heroKinetic" aria-hidden="true">FIQIH BADRIAN</div>
+
+      <div className="relative z-10 w-full px-6 lg:px-10 max-w-7xl mx-auto">
+        <div className="max-w-3xl">
+          <div className="mb-4">
+            <span className="inline-block text-xs font-mono-custom tracking-[.2em] uppercase text-[#1EA5FF] mb-6">Portfolio 2025</span>
+          </div>
+          <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[.95] text-[#F5F1EA] mb-6">
+            FIQIH<br />
+            <span className="text-[#FF2F4F]">BADRIAN</span><br />
+            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#8D8D8D] font-normal" style={{ fontStyle: "italic" }}>Frontend &amp; Fullstack Engineer</span>
+          </h1>
+          <p className="text-base lg:text-lg text-[#8D8D8D] max-w-xl leading-relaxed mb-10">
+            Building fast, responsive, and human-centered digital experiences — from web apps to cross-platform solutions.
+          </p>
+          <div className="flex flex-wrap gap-4">
+            <a href="#projects" className="group inline-flex items-center gap-2 px-8 py-4 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-all duration-300 hover:bg-[#0077CC] hover:gap-4">
+              View Projects
+              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+            <a href="#contact" className="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-[#F5F1EA] font-semibold text-sm uppercase tracking-wider transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)]">
+              Contact
+              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+          </div>
+        </div>
       </div>
-      {shouldRenderColorBends && (
-        <div className="absolute inset-0 w-full h-full">
-          <CanvasWrapper className="w-full h-full" force={effectsMode === 'on'}>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[5, 5, 5]} intensity={0.6} />
-            <ColorBendsR3F
-              force={effectsMode === 'on'}
-              rotation={45}
-              speed={0.2}
-              colors={["#29fbff", "#f4435e"]}
-              transparent
-              autoRotate={0}
-              scale={1}
-              frequency={1}
-              warpStrength={1}
-              mouseInfluence={0.8}
-              parallax={0.5}
-              noise={0.08}
-            />
-          </CanvasWrapper>
-        </div>
-      )}
-      <div className="container mx-auto max-w-7xl relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div>
-            <span className="inline-block bg-red-400 text-white px-4 py-1 rounded-full text-xs font-poppins font-bold mb-6" data-aos="zoom-in">
-              Fullstack Web Developer
-            </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-poppins leading-tight text-gray-800 dark:text-[#e5d9c3] transition-colors" data-aos="fade-up" data-aos-delay="200">
-              HELLO I&apos;M<br />FIQIH BADRIAN
-            </h1>
-            <div className="text-xl lg:text-2xl mt-6 text-gray-600 dark:text-gray-200 transition-colors" data-aos="fade-up" data-aos-delay="400">
-              <TypeWriter 
-                texts={["Creating websites that are fast, responsive, and ready to be used by businesses and individuals."]}
-                speed={100}
-                delay={2000}
-              />
-            </div>
-            <div className="flex flex-wrap gap-4 mt-8" data-aos="fade-up" data-aos-delay="600">
-              <Link className="inline-block px-6 py-3 bg-gray-800 dark:bg-[#e5d9c3] text-white dark:text-gray-900 rounded-full text-lg font-medium hover:bg-gray-900 dark:hover:bg-[#d4c4a8] transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" href="#project">
-                My Project
-              </Link>
-              <Link className="inline-block px-6 py-3 border-2 border-gray-800 dark:border-[#e5d9c3] text-gray-800 dark:text-[#e5d9c3] rounded-full text-lg font-medium hover:bg-gray-800 hover:text-white dark:hover:bg-[#e5d9c3] dark:hover:text-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105" href="/contact">
-                Contact Me
-              </Link>
-            </div>
-          </div>
-          
-          <div className="hidden lg:flex justify-center lg:justify-end" data-aos="fade-left" data-aos-delay="300">
-            <Image
-              src="/images/logo.png"
-              width={280}
-              height={280}
-              alt="profile"
-              className="rounded-full shadow-lg"
-              priority
-              quality={85}
-              sizes="(max-width: 1024px) 0vw, 280px"
-            />
-          </div>
-        </div>
+
+      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator z-10">
+        <span className="text-xs font-mono-custom tracking-[.15em] uppercase text-[#8D8D8D]">Scroll</span>
+        <svg className="w-4 h-4 text-[#8D8D8D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
       </div>
     </section>
   );
 }
-// halo

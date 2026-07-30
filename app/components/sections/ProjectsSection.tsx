@@ -1,246 +1,237 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { FaGithub, FaStar, FaCodeBranch, FaExternalLinkAlt } from 'react-icons/fa';
+import { useState, useEffect } from "react";
+import Image from "next/image";
 
-type Repository = {
-  name: string;
-  description: string;
-  url: string;
-  /**
-   * Local screenshot previews. When multiple are provided, the card will
-   * cross-fade between them as a slideshow. Falls back to `openGraphImageUrl`
-   * when empty.
-   */
-  previews?: string[];
-  openGraphImageUrl: string | null;
-  homepageUrl?: string;
-  primaryLanguage: {
-    name: string;
-    color: string;
-  } | null;
-  stargazerCount: number;
-  forkCount: number;
+const projects = {
+  featured: [
+    {
+      name: "ZxwDB",
+      desc: "Design and visualize MySQL/MariaDB databases effortlessly — Visual ERD tool with auto-detect relationships and modern interface.",
+      url: "https://github.com/fiqihbadrian/ZxwDB",
+      lang: "TypeScript",
+      langColor: "#3178c6",
+      stars: 0,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/ZxwDB",
+    },
+    {
+      name: "Soalin Quiz",
+      desc: "Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.",
+      url: "https://github.com/fiqihbadrian/Soalin-Quiz",
+      lang: "JavaScript",
+      langColor: "#f1e05a",
+      stars: 0,
+      slides: ["/images/projects/dekstop.png", "/images/projects/login.png", "/images/projects/upload.png"],
+    },
+    {
+      name: "Markdown Viewer",
+      desc: "A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.",
+      url: "https://github.com/fiqihbadrian/Markdown-Viewer",
+      lang: "Swift",
+      langColor: "#ff4500",
+      stars: 1,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/Markdown-Viewer",
+    },
+  ],
+  web: [
+    {
+      name: "acc-jambu-2",
+      desc: "E-commerce printer Aneka Citra Computer. Next.js 16 + Prisma + JWT + Xendit sandbox.",
+      url: "https://github.com/fiqihbadrian/acc-jambu-2",
+      lang: "TypeScript",
+      langColor: "#3178c6",
+      stars: 2,
+      slides: ["/images/projects/acc-jambu-home.png", "/images/projects/acc-jambu-login.png", "/images/projects/acc-jambu-dashboard.png", "/images/projects/acc-jambu-edit.png", "/images/projects/acc-jambu-admin.png"],
+    },
+    {
+      name: "Azxchat",
+      desc: "Chat web using Next.js and Socket.IO.",
+      url: "https://github.com/fiqihbadrian/Azxchat",
+      lang: "JavaScript",
+      langColor: "#f1e05a",
+      stars: 2,
+      slides: ["/images/projects/azxchat-1.png", "/images/projects/azxchat-2.png"],
+    },
+    {
+      name: "Soalin Quiz",
+      desc: "Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.",
+      url: "https://github.com/fiqihbadrian/Soalin-Quiz",
+      lang: "JavaScript",
+      langColor: "#f1e05a",
+      stars: 0,
+      slides: ["/images/projects/dekstop.png", "/images/projects/login.png", "/images/projects/upload.png"],
+    },
+  ],
+  app: [
+    {
+      name: "ZxwDB",
+      desc: "Design and visualize MySQL/MariaDB databases effortlessly — Visual ERD tool with auto-detect relationships and modern interface.",
+      url: "https://github.com/fiqihbadrian/ZxwDB",
+      lang: "TypeScript",
+      langColor: "#3178c6",
+      stars: 0,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/ZxwDB",
+    },
+    {
+      name: "Markdown Viewer",
+      desc: "A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.",
+      url: "https://github.com/fiqihbadrian/Markdown-Viewer",
+      lang: "Swift",
+      langColor: "#ff4500",
+      stars: 1,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/Markdown-Viewer",
+    },
+    {
+      name: "Python Game Loncat",
+      desc: "Game sederhana yang di buat menggunakan bahasa python dan package pygame.",
+      url: "https://github.com/fiqihbadrian/Python-Game-Loncat",
+      lang: "Python",
+      langColor: "#3572A5",
+      stars: 1,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/Python-Game-Loncat",
+    },
+  ],
 };
 
-// Pinned repositories. Projects with README-bundled previews use local
-// screenshots (see public/images/projects/*); the rest use GitHub OG image.
-const pinnedRepos: Repository[] = [
-  {
-    name: 'acc-jambu-2',
-    description: 'E-commerce printer Aneka Citra Computer. Next.js 16 + Prisma + JWT + Xendit sandbox.',
-    url: 'https://github.com/fiqihbadrian/acc-jambu-2',
-    previews: [
-      '/images/projects/acc-jambu-home.png',
-      '/images/projects/acc-jambu-login.png',
-      '/images/projects/acc-jambu-dashboard.png',
-      '/images/projects/acc-jambu-edit.png',
-      '/images/projects/acc-jambu-admin.png',
-    ],
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/acc-jambu-2',
-    primaryLanguage: { name: 'TypeScript', color: '#3178c6' },
-    stargazerCount: 2,
-    forkCount: 0,
-  },
-  {
-    name: 'Azxchat',
-    description: 'Chat web using Next.js and Socket.IO.',
-    url: 'https://github.com/fiqihbadrian/Azxchat',
-    previews: [
-      '/images/projects/azxchat-1.png',
-      '/images/projects/azxchat-2.png',
-    ],
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/Azxchat',
-    primaryLanguage: { name: 'JavaScript', color: '#f1e05a' },
-    stargazerCount: 2,
-    forkCount: 0,
-  },
-  {
-    name: 'sistem-manajemen-printer',
-    description: 'Sistem Manajemen Printer berbasis PHP untuk mengelola data printer yang diservis.',
-    url: 'https://github.com/fiqihbadrian/sistem-manajemen-printer',
-    previews: ['/images/projects/sistem-manajemen-printer.png'],
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/sistem-manajemen-printer',
-    primaryLanguage: { name: 'PHP', color: '#4F5D95' },
-    stargazerCount: 2,
-    forkCount: 0,
-  },
-  {
-    name: 'Soalin-Quiz',
-    description: 'Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.',
-    url: 'https://github.com/fiqihbadrian/Soalin-Quiz',
-    previews: [
-      '/images/projects/dekstop.png',
-      '/images/projects/login.png',
-      '/images/projects/upload.png'
-    ],
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/Soalin-Quiz',
-    primaryLanguage: { name: 'JavaScript', color: '#f1e05a' },
-    stargazerCount: 0,
-    forkCount: 0,
-  },
-  {
-    name: 'Python-Game-Loncat',
-    description: 'Game sederhana yang di buat menggunakan bahasa python dan package pygame.',
-    url: 'https://github.com/fiqihbadrian/Python-Game-Loncat',
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/Python-Game-Loncat',
-    primaryLanguage: { name: 'Python', color: '#3572A5' },
-    stargazerCount: 1,
-    forkCount: 0,
-  },
-  {
-    name: 'todo-list',
-    description: 'Simple todo list application.',
-    url: 'https://github.com/fiqihbadrian/todo-list',
-    openGraphImageUrl: 'https://opengraph.githubassets.com/1/fiqihbadrian/todo-list',
-    primaryLanguage: { name: 'HTML', color: '#e34c26' },
-    stargazerCount: 1,
-    forkCount: 0,
-  },
-];
+type Tab = "featured" | "web" | "app" | "design";
 
-function ProjectPreview({ repo }: { repo: Repository }) {
-  const slides = repo.previews && repo.previews.length > 0 ? repo.previews : null;
-  const [index, setIndex] = useState(0);
-
+function Slideshow({ slides }: { slides: string[] }) {
+  const [slide, setSlide] = useState(0);
   useEffect(() => {
-    if (!slides || slides.length <= 1) return;
-
-    const prefersReducedMotion =
-      typeof window !== 'undefined' &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion) return;
-
-    const id = window.setInterval(() => {
-      setIndex((i) => (i + 1) % slides.length);
-    }, 3500);
-    return () => window.clearInterval(id);
-  }, [slides]);
-
-  if (slides) {
-    return (
-      <div className="relative w-full h-48 rounded-lg mb-4 overflow-hidden bg-gray-100 dark:bg-gray-900">
-        {slides.map((src, i) => (
-          <Image
-            key={src}
-            src={src}
-            alt={`${repo.name} preview ${i + 1}`}
-            fill
-            className={`object-cover transition-opacity duration-700 ease-in-out ${i === index ? 'opacity-100' : 'opacity-0'}`}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            priority={i === 0}
-          />
-        ))}
-        {slides.length > 1 && (
-          <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
-            {slides.map((_, i) => (
-              <span
-                key={i}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  i === index ? 'w-5 bg-white' : 'w-1.5 bg-white/60'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (repo.openGraphImageUrl) {
-    return (
-      <div className="w-full h-48 relative rounded-lg mb-4 overflow-hidden">
-        <Image
-          src={repo.openGraphImageUrl}
-          alt={repo.name}
-          fill
-          className="object-cover"
-          loading="lazy"
-          sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        />
-      </div>
-    );
-  }
-
+    if (slides.length <= 1) return;
+    const id = setInterval(() => setSlide((i) => (i + 1) % slides.length), 3500);
+    return () => clearInterval(id);
+  }, [slides.length]);
   return (
-    <div className="w-full h-48 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mb-4 flex items-center justify-center">
-      <FaGithub className="text-white text-6xl opacity-50" />
+    <div className="aspect-[16/10] overflow-hidden relative">
+      {slides.map((src, i) => (
+        <Image
+          key={src}
+          src={src}
+          alt=""
+          fill
+          className={`object-cover transition-opacity duration-700 ${i === slide ? "opacity-100" : "opacity-0"}`}
+          loading={i === 0 ? undefined : "lazy"}
+          sizes="(max-width: 768px) 100vw, 33vw"
+        />
+      ))}
+      {slides.length > 1 && (
+        <div className="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
+          {slides.map((_, i) => (
+            <span key={i} className={`h-1.5 rounded-full transition-all duration-300 ${i === slide ? "w-5 bg-white" : "w-1.5 bg-white/60"}`} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
 
-export default function ProjectsSection() {
+function ProjectCard({ p, delay }: { p: any; delay: number }) {
   return (
-    <section
-      id="project"
-      className="py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 via-purple-50/50 to-purple-50 dark:from-slate-900 dark:via-gray-900 dark:to-gray-900"
-    >
-      <div className="container mx-auto max-w-7xl">
-        <h2
-          className="text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center flex justify-center items-center gap-3 mb-10 transition-colors"
-          data-aos="fade-up"
-        >
-          My Projects <FaGithub />
-        </h2>
+    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block" style={{ animationDelay: `${delay}ms` }}>
+      <div className="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+        {p.slides ? (
+          <Slideshow slides={p.slides} />
+        ) : (
+          <div className="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+            <img src={p.img} alt={p.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
+          </div>
+        )}
+        <div className="p-6">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">{p.name}</h3>
+            <svg className="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+          </div>
+          <p className="text-sm text-[#8D8D8D] mb-4 line-clamp-2">{p.desc}</p>
+          <div className="flex items-center gap-4 text-xs text-[#8D8D8D]">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: p.langColor }} />
+              <span>{p.lang}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+              <span>{p.stars}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  );
+}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          {pinnedRepos.map((repo, index) => (
-            <Link href={repo.url} target="_blank" rel="noopener noreferrer" key={repo.name}>
-              <div
-                className="bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full border border-gray-200/50 dark:border-gray-700/50 hover:-translate-y-2"
-                data-aos="zoom-in"
-                data-aos-delay={200 + index * 100}
-              >
-                <ProjectPreview repo={repo} />
+const tabs: { key: Tab; label: string; accent: string }[] = [
+  { key: "featured", label: "Unggulan", accent: "#FF2F4F" },
+  { key: "web", label: "Web Programming", accent: "#1EA5FF" },
+  { key: "app", label: "App Program", accent: "#1EA5FF" },
+  { key: "design", label: "Design", accent: "#1EA5FF" },
+];
 
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white transition-colors flex-1">
-                    {repo.name}
-                  </h3>
-                  <FaExternalLinkAlt className="text-gray-400 dark:text-gray-500 text-sm mt-1 flex-shrink-0 ml-2" />
-                </div>
+export default function ProjectsSection() {
+  const [tab, setTab] = useState<Tab>("featured");
 
-                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-2 transition-colors">
-                  {repo.description || 'No description available'}
-                </p>
+  return (
+    <section id="projects" className="relative py-32 lg:py-48">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="mb-12 lg:mb-16">
+          <span className="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">02</span>
+          <h2 className="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style={{ fontStyle: "italic" }}>Projects</h2>
+        </div>
 
-                <div className="flex items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
-                  {repo.primaryLanguage && (
-                    <div className="flex items-center gap-1">
-                      <span
-                        className="w-3 h-3 rounded-full"
-                        style={{ backgroundColor: repo.primaryLanguage.color }}
-                      ></span>
-                      <span>{repo.primaryLanguage.name}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-1">
-                    <FaStar className="text-yellow-500" />
-                    <span>{repo.stargazerCount}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <FaCodeBranch />
-                    <span>{repo.forkCount}</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
+        <div className="flex flex-wrap gap-2 mb-12 border-b border-[rgba(255,255,255,.06)] pb-4">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className="px-6 py-3 text-sm font-medium tracking-wider uppercase transition-all duration-300 font-mono-custom"
+              style={{
+                color: tab === t.key ? t.accent : "#8D8D8D",
+                borderBottom: tab === t.key ? `2px solid ${t.accent}` : "2px solid transparent",
+              }}
+              onMouseEnter={(e) => { if (tab !== t.key) e.currentTarget.style.color = "#F5F1EA"; }}
+              onMouseLeave={(e) => { if (tab !== t.key) e.currentTarget.style.color = "#8D8D8D"; }}
+            >
+              {t.label}
+            </button>
           ))}
         </div>
 
-        <div className="flex justify-center" data-aos="fade-up">
-          <Link
-            href="https://github.com/fiqihbadrian"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-8 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-semibold rounded-full hover:scale-105 transition-transform duration-300 shadow-lg hover:shadow-xl"
-          >
-            <FaGithub className="text-xl" />
-            <span>View All on GitHub</span>
-          </Link>
+        {/* Tab content: featured */}
+        {tab === "featured" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.featured.map((p, i) => <ProjectCard key={p.name} p={p} delay={i * 100} />)}
+          </div>
+        )}
+
+        {/* Tab content: web */}
+        {tab === "web" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.web.map((p, i) => <ProjectCard key={p.name + i} p={p} delay={i * 100} />)}
+          </div>
+        )}
+
+        {/* Tab content: app */}
+        {tab === "app" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.app.map((p, i) => <ProjectCard key={p.name + i} p={p} delay={i * 100} />)}
+          </div>
+        )}
+
+        {/* Tab content: design */}
+        {tab === "design" && (
+          <div className="flex items-center justify-center py-20">
+            <div className="text-center">
+              <svg className="w-12 h-12 mx-auto mb-4 text-[#8D8D8D]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+              <p className="text-[#8D8D8D] font-mono-custom text-sm">Design projects coming soon</p>
+            </div>
+          </div>
+        )}
+
+        {/* See More */}
+        <div className="mt-10 text-center">
+          <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
+            See More Projects
+            <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+          </a>
         </div>
       </div>
     </section>

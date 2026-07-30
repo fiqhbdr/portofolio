@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiqih Badrian — Digital Product Engineer</title>
+<meta name="description" content="Fiqih Badrian builds digital products — fast, elegant, human. Frontend, Flutter, backend, UI engineering.">
+<meta name="keywords" content="Fiqih Badrian, frontend developer, Flutter, web developer, portfolio, JavaScript, TypeScript">
+<meta name="theme-color" content="#0A0A0A">
+<link rel="canonical" href="https://www.fiqihbadrian.my.id">
+<meta property="og:title" content="Fiqih Badrian — Digital Product Engineer">
+<meta property="og:description" content="I build digital products that people love. Frontend, Flutter, backend, UI engineering.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://www.fiqihbadrian.my.id">
+<meta property="og:image" content="https://www.fiqihbadrian.my.id/public/images/logo.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Fiqih Badrian — Digital Product Engineer">
+<meta name="twitter:description" content="I build digital products that people love.">
+<meta name="twitter:image" content="https://www.fiqihbadrian.my.id/public/images/logo.png">
+<link rel="icon" type="image/png" href="public/images/logo.png">
+<link rel="apple-touch-icon" href="public/images/logo.png">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --bg-secondary: #0A0A0A;
+    --text: #F5F1EA;
+    --text-secondary: #8D8D8D;
+    --accent: #1EA5FF;
+    --accent-warm: #D8B26A;
+    --border: rgba(255,255,255,.08);
+    --hover-bg: rgba(255,255,255,.04);
+    --selection: #1EA5FF;
+  }
+  ::selection { background: var(--selection); color: #0A0A0A; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+  .font-display { font-family: 'Cormorant Garamond', serif; }
+  .font-mono-custom { font-family: 'JetBrains Mono', monospace; }
+
+  /* Noise texture overlay */
+  .noise::before {
+    content: ''; position: fixed; inset: 0; z-index: 9999; pointer-events: none;
+    opacity: .035; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    background-repeat: repeat; background-size: 256px 256px;
+  }
+
+  /* Hero kinetic typography */
+  .hero-kinetic {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 700; line-height: .85;
+    background: linear-gradient(180deg, rgba(245,241,234,.12) 0%, rgba(245,241,234,.04) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    width: 120%; text-align: center; pointer-events: none;
+    font-size: clamp(6rem, 20vw, 18rem);
+    letter-spacing: -.03em;
+    animation: kinecticFloat 6s ease-in-out infinite;
+    will-change: transform;
+  }
+  @keyframes kinecticFloat {
+    0%, 100% { transform: translate(-50%,-50%) scale(1) translateY(0); }
+    33% { transform: translate(-50%,-50%) scale(1.02) translateY(-8px); }
+    66% { transform: translate(-50%,-50%) scale(.98) translateY(4px); }
+  }
+  .hero-kinectic-scroll { transition: transform .1s ease-out; }
+
+  /* Scroll indicator */
+  .scroll-indicator { animation: scrollBounce 2.4s ease-in-out infinite; }
+  @keyframes scrollBounce {
+    0%, 100% { transform: translateY(0); opacity: .6; }
+    50% { transform: translateY(8px); opacity: 1; }
+  }
+
+  /* Section reveals */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease-out, transform .8s ease-out; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity .7s ease-out, transform .7s ease-out; }
+  .reveal-left.visible { opacity: 1; transform: translateX(0); }
+  .reveal-right { opacity: 0; transform: translateX(40px); transition: opacity .7s ease-out, transform .7s ease-out; }
+  .reveal-right.visible { opacity: 1; transform: translateX(0); }
+  .reveal-scale { opacity: 0; transform: scale(.92); transition: opacity .9s ease-out, transform .9s ease-out; }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+
+  /* Image zoom on hover */
+  .img-zoom { overflow: hidden; }
+  .img-zoom img { transition: transform .7s ease-out; }
+  .img-zoom:hover img { transform: scale(1.05); }
+
+  /* Text reveal */
+  .text-reveal { overflow: hidden; }
+  .text-reveal span { display: block; transform: translateY(100%); transition: transform .8s ease-out; }
+  .text-reveal.visible span { transform: translateY(0); }
+
+  /* Project number */
+  .project-number { font-family: 'Cormorant Garamond', serif; font-size: clamp(4rem, 10vw, 8rem); line-height: 1; color: rgba(216,178,106,.15); font-weight: 700; }
+
+  /* Certificate timeline line */
+  .timeline-line { position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .timeline-line::after {
+    content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 9px; height: 9px; border-radius: 50%; background: var(--accent);
+    transition: box-shadow .4s ease;
+  }
+  .cert-item:hover .timeline-line::after { box-shadow: 0 0 12px var(--accent); }
+
+  /* Cursor glow */
+  .cursor-glow {
+    position: fixed; pointer-events: none; z-index: 9998;
+    width: 300px; height: 300px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(126,235,255,.07) 0%, transparent 70%);
+    transform: translate(-50%,-50%);
+    transition: opacity .3s ease;
+    will-change: transform;
+  }
+
+  /* Nav transition */
+  .nav-blur { backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+
+  /* Skill tag hover */
+  .skill-tag { transition: all .3s ease; cursor: default; }
+  .skill-tag:hover { background: rgba(30,165,255,.15) !important; border-color: rgba(30,165,255,.4) !important; color: var(--accent) !important; transform: translateY(-2px); }
+
+  /* Project card tilt container */
+  .tilt-container { perspective: 1200px; }
+  .tilt-inner { transition: transform .2s ease-out; transform-style: preserve-3d; will-change: transform; }
+
+  /* Gradient background orbs */
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none; }
+  .orb-1 { width: 500px; height: 500px; background: rgba(30,165,255,.05); top: -10%; right: -5%; }
+  .orb-2 { width: 400px; height: 400px; background: rgba(245,241,234,.03); bottom: 0; left: -10%; }
+  .orb-3 { width: 350px; height: 350px; background: rgba(126,235,255,.04); top: 50%; left: 50%; transform: translate(-50%,-50%); }
+
+  /* Image reveal clip */
+  .img-reveal { clip-path: inset(0 0 0 0); transition: clip-path 1.2s ease-out; }
+  .img-reveal-hidden { clip-path: inset(0 0 100% 0); }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); }
+
+  /* Responsive kinetic scale */
+  @media (max-width: 768px) {
+    .hero-kinetic { font-size: clamp(3rem, 15vw, 5rem); width: 110%; }
+    .project-number { font-size: clamp(3rem, 15vw, 5rem); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Noise overlay -->
+<div class="noise"></div>
+
+<!-- Cursor glow -->
+<div class="cursor-glow hidden md:block" id="cursorGlow"></div>
+
+<!-- ============ NAVIGATION ============ -->
+<div x-data="{ scrolled: false, mobileOpen: false, active: 'home' }"
+     @scroll.window="scrolled = window.scrollY > 60"
+     class="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
+     :class="scrolled ? 'bg-[#0A0A0A]/90 nav-blur shadow-lg shadow-black/10' : 'bg-transparent'">
+
+  <div class="max-w-7xl mx-auto flex items-center justify-between px-6 lg:px-10 py-4 lg:py-5">
+    <!-- Logo -->
+    <a href="#home" class="font-display text-2xl lg:text-3xl font-bold text-[#F5F1EA] hover:text-[#1EA5FF] transition-colors duration-300" style="text-decoration: none;">
+      Fiqih Badrian
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-8">
+      <a href="#home" @click.prevent="active='home'; document.getElementById('home').scrollIntoView({behavior:'smooth'})"
+         class="text-sm font-medium tracking-wider uppercase transition-colors duration-300 relative group"
+         :class="active === 'home' ? 'text-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA]'">
+        Home <span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left" :class="active === 'home' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'"></span>
+      </a>
+      <a href="#about" @click.prevent="active='about'; document.getElementById('about').scrollIntoView({behavior:'smooth'})"
+         class="text-sm font-medium tracking-wider uppercase transition-colors duration-300 relative group"
+         :class="active === 'about' ? 'text-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA]'">
+        About <span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left" :class="active === 'about' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'"></span>
+      </a>
+      <a href="#projects" @click.prevent="active='projects'; document.getElementById('projects').scrollIntoView({behavior:'smooth'})"
+         class="text-sm font-medium tracking-wider uppercase transition-colors duration-300 relative group"
+         :class="active === 'projects' ? 'text-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA]'">
+        Projects <span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left" :class="active === 'projects' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'"></span>
+      </a>
+      <a href="#certificates" @click.prevent="active='certificates'; document.getElementById('certificates').scrollIntoView({behavior:'smooth'})"
+         class="text-sm font-medium tracking-wider uppercase transition-colors duration-300 relative group"
+         :class="active === 'certificates' ? 'text-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA]'">
+        Certificates <span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left" :class="active === 'certificates' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'"></span>
+      </a>
+      <a href="#contact" @click.prevent="active='contact'; document.getElementById('contact').scrollIntoView({behavior:'smooth'})"
+         class="text-sm font-medium tracking-wider uppercase transition-colors duration-300 relative group"
+         :class="active === 'contact' ? 'text-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA]'">
+        Contact <span class="absolute -bottom-1 left-0 w-full h-[1px] bg-[#1EA5FF] transition-transform duration-300 origin-left" :class="active === 'contact' ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'"></span>
+      </a>
+    </div>
+
+    <!-- Mobile hamburger -->
+    <button @click="mobileOpen = !mobileOpen" class="md:hidden text-[#F5F1EA] p-2 relative z-50" aria-label="Toggle menu" :aria-expanded="mobileOpen">
+      <svg class="w-6 h-6 transition-transform duration-300" :class="mobileOpen ? 'rotate-90' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"/>
+        <path x-show="mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <div x-show="mobileOpen" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0" x-transition:leave-end="opacity-0 -translate-y-4" class="md:hidden bg-[#0A0A0A]/95 nav-blur border-t border-[rgba(255,255,255,.05)]" style="display: none;">
+    <div class="px-6 py-6 space-y-1">
+      <a href="#home" @click="mobileOpen=false; active='home'; document.getElementById('home').scrollIntoView({behavior:'smooth'})" class="block py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors" :class="active === 'home' ? 'text-[#1EA5FF] bg-[rgba(30,165,255,.15)]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]'">Home</a>
+      <a href="#about" @click="mobileOpen=false; active='about'; document.getElementById('about').scrollIntoView({behavior:'smooth'})" class="block py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors" :class="active === 'about' ? 'text-[#1EA5FF] bg-[rgba(30,165,255,.15)]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]'">About</a>
+      <a href="#projects" @click="mobileOpen=false; active='projects'; document.getElementById('projects').scrollIntoView({behavior:'smooth'})" class="block py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors" :class="active === 'projects' ? 'text-[#1EA5FF] bg-[rgba(30,165,255,.15)]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]'">Projects</a>
+      <a href="#certificates" @click="mobileOpen=false; active='certificates'; document.getElementById('certificates').scrollIntoView({behavior:'smooth'})" class="block py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors" :class="active === 'certificates' ? 'text-[#1EA5FF] bg-[rgba(30,165,255,.15)]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]'">Certificates</a>
+      <a href="#contact" @click="mobileOpen=false; active='contact'; document.getElementById('contact').scrollIntoView({behavior:'smooth'})" class="block py-3 px-4 text-sm font-medium tracking-wider uppercase rounded-lg transition-colors" :class="active === 'contact' ? 'text-[#1EA5FF] bg-[rgba(30,165,255,.15)]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] hover:bg-[rgba(255,255,255,.04)]'">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section id="home" class="relative min-h-screen flex items-center overflow-hidden">
+  <!-- Background gradients -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- Kinetic typography background -->
+  <div class="hero-kinetic" id="heroKinetic" aria-hidden="true">FIQIH BADRIAN</div>
+
+  <div class="relative z-10 w-full px-6 lg:px-10 max-w-7xl mx-auto">
+    <div class="max-w-3xl">
+      <!-- Greeting -->
+      <div class="reveal visible mb-4">
+        <span class="inline-block text-xs font-mono-custom tracking-[.2em] uppercase text-[#1EA5FF] mb-6">Portfolio 2025</span>
+      </div>
+
+      <!-- Main headline -->
+      <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[.95] text-[#F5F1EA] mb-6 reveal visible" style="transition-delay: .15s;">
+        FIQIH<br>
+        <span class="text-[#FF2F4F]">BADRIAN</span><br>
+        <span class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-[#8D8D8D] font-normal" style="font-style: italic;">Frontend &amp; Fullstack Engineer</span>
+      </h1>
+
+      <!-- Intro -->
+      <p class="text-base lg:text-lg text-[#8D8D8D] max-w-xl leading-relaxed mb-10 reveal visible" style="transition-delay: .3s;">
+        Building fast, responsive, and human-centered digital experiences — from web apps to cross-platform solutions.
+      </p>
+
+      <!-- CTA buttons -->
+      <div class="flex flex-wrap gap-4 reveal visible" style="transition-delay: .45s;">
+        <a href="#projects" class="group inline-flex items-center gap-2 px-8 py-4 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-all duration-300 hover:bg-[#0077CC] hover:gap-4">
+          View Projects
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+        <a href="#contact" class="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-[#F5F1EA] font-semibold text-sm uppercase tracking-wider transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)]">
+          Contact
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scroll indicator -->
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 scroll-indicator z-10">
+    <span class="text-xs font-mono-custom tracking-[.15em] uppercase text-[#8D8D8D]">Scroll</span>
+    <svg class="w-4 h-4 text-[#8D8D8D]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="relative py-32 lg:py-48 overflow-hidden">
+  <div class="orb orb-3"></div>
+
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <!-- Section label -->
+    <div class="mb-16 lg:mb-24 reveal">
+      <span class="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">01</span>
+      <h2 class="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style="font-style: italic;">About</h2>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
+      <!-- Left: Image -->
+      <div class="reveal-left tilt-container lg:max-w-sm xl:max-w-md mx-auto lg:mx-0">
+        <div class="tilt-inner relative group img-zoom">
+          <div class="aspect-[3/4] overflow-hidden">
+            <img src="public/images/pikiw.jpg" alt="Fiqih Badrian" class="w-full h-full object-cover" loading="lazy">
+          </div>
+          <div class="absolute inset-0 border border-[rgba(255,255,255,.08)] pointer-events-none"></div>
+        </div>
+        <!-- Decorative line -->
+        <div class="mt-6 flex items-center gap-4">
+          <div class="h-[1px] w-12 bg-[#1EA5FF]"></div>
+          <span class="text-sm text-[#8D8D8D] font-mono-custom">Digital craftsman since 2020</span>
+        </div>
+      </div>
+
+      <!-- Right: Biography -->
+      <div class="reveal-right flex flex-col justify-center">
+        <p class="font-display text-2xl lg:text-3xl leading-tight text-[#F5F1EA] mb-8">
+          I believe great digital products are built at the intersection of <span class="text-[#1EA5FF]">design</span>, <span class="text-[#1EA5FF]">engineering</span>, and <span class="text-[#1EA5FF]">empathy</span>.
+        </p>
+        <div class="space-y-5 text-[#8D8D8D] leading-relaxed">
+          <p>
+            Hi! I'm Fiqih Badrian, a passionate frontend engineer with a love for creating beautiful and functional web experiences. I specialize in building modern, responsive applications using the latest technologies.
+          </p>
+          <p>
+            My journey in web development started with a curiosity about how websites work, and it has grown into a passion for crafting digital solutions that make a difference. I believe in writing clean, maintainable code and creating interfaces that users love.
+          </p>
+          <p>
+            When I'm not coding, you can find me exploring new technologies, contributing to open source projects, or learning about the latest trends in web development and design.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills as editorial tags -->
+    <div class="mt-24 lg:mt-32 reveal">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="h-[1px] flex-1 bg-[rgba(255,255,255,.08)]"></div>
+        <span class="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">Craft &amp; Tools</span>
+        <div class="h-[1px] flex-1 bg-[rgba(255,255,255,.08)]"></div>
+      </div>
+      <div class="flex flex-wrap gap-3 justify-center">
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Frontend</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Flutter</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Laravel</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Next.js</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">PHP</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">JavaScript</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">TypeScript</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">MySQL</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Supabase</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Docker</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Git</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Tailwind</span>
+        <span class="skill-tag px-5 py-2.5 border border-[rgba(255,255,255,.1)] bg-[rgba(255,255,255,.03)] text-sm text-[#F5F1EA] font-medium">Figma</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PROJECTS ============ -->
+<section id="projects" class="relative py-32 lg:py-48">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10" x-data="{ tab: 'featured' }">
+    <!-- Section label -->
+    <div class="mb-12 lg:mb-16 reveal">
+      <span class="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">02</span>
+      <h2 class="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style="font-style: italic;">Projects</h2>
+    </div>
+
+    <!-- Tabs -->
+    <div class="flex flex-wrap gap-2 mb-12 reveal border-b border-[rgba(255,255,255,.06)] pb-4">
+      <button @click="tab = 'featured'"
+        class="px-6 py-3 text-sm font-medium tracking-wider uppercase transition-all duration-300 font-mono-custom"
+        :class="tab === 'featured' ? 'text-[#FF2F4F] border-b-2 border-[#FF2F4F]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] border-b-2 border-transparent'">
+        Unggulan
+      </button>
+      <button @click="tab = 'web'"
+        class="px-6 py-3 text-sm font-medium tracking-wider uppercase transition-all duration-300 font-mono-custom"
+        :class="tab === 'web' ? 'text-[#1EA5FF] border-b-2 border-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] border-b-2 border-transparent'">
+        Web Programming
+      </button>
+      <button @click="tab = 'app'"
+        class="px-6 py-3 text-sm font-medium tracking-wider uppercase transition-all duration-300 font-mono-custom"
+        :class="tab === 'app' ? 'text-[#1EA5FF] border-b-2 border-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] border-b-2 border-transparent'">
+        App Program
+      </button>
+      <button @click="tab = 'design'"
+        class="px-6 py-3 text-sm font-medium tracking-wider uppercase transition-all duration-300 font-mono-custom"
+        :class="tab === 'design' ? 'text-[#1EA5FF] border-b-2 border-[#1EA5FF]' : 'text-[#8D8D8D] hover:text-[#F5F1EA] border-b-2 border-transparent'">
+        Design
+      </button>
+    </div>
+
+    <!-- Unggulan projects (featured, max 3) -->
+    <div x-show="tab === 'featured'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1: ZxwDB -->
+        <a href="https://github.com/fiqihbadrian/ZxwDB" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 0ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+              <img src="https://opengraph.githubassets.com/1/fiqihbadrian/ZxwDB" alt="ZxwDB" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">ZxwDB</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Design and visualize MySQL/MariaDB databases effortlessly — Visual ERD tool with auto-detect relationships and modern interface.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#3178c6"></span>
+                  <span>TypeScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Soalin Quiz (slideshow 3 images) -->
+        <a href="https://github.com/fiqihbadrian/Soalin-Quiz" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 100ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden relative" x-data="{ slide: 0, total: 3 }" x-init="setInterval(() => { slide = (slide + 1) % total }, 3500)">
+              <img x-show="slide === 0" src="public/images/projects/dekstop.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 1" src="public/images/projects/login.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 2" src="public/images/projects/upload.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <div class="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
+                <template x-for="i in total" :key="i">
+                  <span :class="i-1 === slide ? 'w-5 bg-white' : 'w-1.5 bg-white/60'" class="h-1.5 rounded-full transition-all duration-300"></span>
+                </template>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Soalin Quiz</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#f1e05a"></span>
+                  <span>JavaScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Markdown Viewer -->
+        <a href="https://github.com/fiqihbadrian/Markdown-Viewer" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 200ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+              <img src="https://opengraph.githubassets.com/1/fiqihbadrian/Markdown-Viewer" alt="Markdown Viewer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Markdown Viewer</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#ff4500"></span>
+                  <span>Swift</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- See More -->
+      <div class="mt-10 text-center reveal">
+        <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
+          See More Projects
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Web Programming projects (max 3 shown) -->
+    <div x-show="tab === 'web'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1: acc-jambu-2 (slideshow 5 images) -->
+        <a href="https://github.com/fiqihbadrian/acc-jambu-2" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 0ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden relative" x-data="{ slide: 0, total: 5 }" x-init="setInterval(() => { slide = (slide + 1) % total }, 3500)">
+              <img x-show="slide === 0" src="public/images/projects/acc-jambu-home.png" alt="acc-jambu-2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 1" src="public/images/projects/acc-jambu-login.png" alt="acc-jambu-2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 2" src="public/images/projects/acc-jambu-dashboard.png" alt="acc-jambu-2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 3" src="public/images/projects/acc-jambu-edit.png" alt="acc-jambu-2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 4" src="public/images/projects/acc-jambu-admin.png" alt="acc-jambu-2" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <div class="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
+                <template x-for="i in total" :key="i">
+                  <span :class="i-1 === slide ? 'w-5 bg-white' : 'w-1.5 bg-white/60'" class="h-1.5 rounded-full transition-all duration-300"></span>
+                </template>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">acc-jambu-2</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">E-commerce printer Aneka Citra Computer. Next.js 16 + Prisma + JWT + Xendit sandbox.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#3178c6"></span>
+                  <span>TypeScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Azxchat (slideshow 2 images) -->
+        <a href="https://github.com/fiqihbadrian/Azxchat" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 100ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden relative" x-data="{ slide: 0, total: 2 }" x-init="setInterval(() => { slide = (slide + 1) % total }, 3500)">
+              <img x-show="slide === 0" src="public/images/projects/azxchat-1.png" alt="Azxchat" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 1" src="public/images/projects/azxchat-2.png" alt="Azxchat" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <div class="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
+                <template x-for="i in total" :key="i">
+                  <span :class="i-1 === slide ? 'w-5 bg-white' : 'w-1.5 bg-white/60'" class="h-1.5 rounded-full transition-all duration-300"></span>
+                </template>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Azxchat</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Chat web using Next.js and Socket.IO.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#f1e05a"></span>
+                  <span>JavaScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>2</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Soalin-Quiz (slideshow 3 images) -->
+        <a href="https://github.com/fiqihbadrian/Soalin-Quiz" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 200ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden relative" x-data="{ slide: 0, total: 3 }" x-init="setInterval(() => { slide = (slide + 1) % total }, 3500)">
+              <img x-show="slide === 0" src="public/images/projects/dekstop.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 1" src="public/images/projects/login.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <img x-show="slide === 2" src="public/images/projects/upload.png" alt="Soalin Quiz" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700" loading="lazy">
+              <div class="absolute bottom-2 left-0 right-0 flex items-center justify-center gap-1.5 z-10">
+                <template x-for="i in total" :key="i">
+                  <span :class="i-1 === slide ? 'w-5 bg-white' : 'w-1.5 bg-white/60'" class="h-1.5 rounded-full transition-all duration-300"></span>
+                </template>
+              </div>
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Soalin Quiz</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#f1e05a"></span>
+                  <span>JavaScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- See More -->
+      <div class="mt-10 text-center reveal">
+        <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
+          See More Projects
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- App Program projects (max 3 shown) -->
+    <div x-show="tab === 'app'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Card 1: ZxwDB -->
+        <a href="https://github.com/fiqihbadrian/ZxwDB" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 0ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+              <img src="https://opengraph.githubassets.com/1/fiqihbadrian/ZxwDB" alt="ZxwDB" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">ZxwDB</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Design and visualize MySQL/MariaDB databases effortlessly — Visual ERD tool with auto-detect relationships and modern interface.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#3178c6"></span>
+                  <span>TypeScript</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2: Markdown Viewer -->
+        <a href="https://github.com/fiqihbadrian/Markdown-Viewer" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 100ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+              <img src="https://opengraph.githubassets.com/1/fiqihbadrian/Markdown-Viewer" alt="Markdown Viewer" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Markdown Viewer</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#ff4500"></span>
+                  <span>Swift</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Python-Game-Loncat -->
+        <a href="https://github.com/fiqihbadrian/Python-Game-Loncat" target="_blank" rel="noopener noreferrer" class="group block reveal" style="transition-delay: 200ms;">
+          <div class="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
+            <div class="aspect-[16/10] overflow-hidden bg-[rgba(255,255,255,.03)] flex items-center justify-center">
+              <img src="https://opengraph.githubassets.com/1/fiqihbadrian/Python-Game-Loncat" alt="Python Game Loncat" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <div class="p-6">
+              <div class="flex items-center justify-between mb-2">
+                <h3 class="font-display text-xl font-bold text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors">Python Game Loncat</h3>
+                <svg class="w-4 h-4 text-[#8D8D8D] group-hover:text-[#1EA5FF] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+              </div>
+              <p class="text-sm text-[#8D8D8D] mb-4 line-clamp-2">Game sederhana yang di buat menggunakan bahasa python dan package pygame.</p>
+              <div class="flex items-center gap-4 text-xs text-[#8D8D8D]">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full" style="background-color:#3572A5"></span>
+                  <span>Python</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                  <span>1</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- See More -->
+      <div class="mt-10 text-center reveal">
+        <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
+          See More Projects
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <!-- Design projects (max 3 shown) -->
+    <div x-show="tab === 'design'" x-transition:enter="transition ease-out duration-500" x-transition:enter-start="opacity-0 translate-y-4" x-transition:enter-end="opacity-100 translate-y-0">
+      <div class="flex items-center justify-center py-20 reveal">
+        <div class="text-center">
+          <svg class="w-12 h-12 mx-auto mb-4 text-[#8D8D8D]/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+          <p class="text-[#8D8D8D] font-mono-custom text-sm">Design projects coming soon</p>
+        </div>
+      </div>
+
+      <div class="mt-10 text-center reveal">
+        <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
+          See More Projects
+          <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CERTIFICATES ============ -->
+<section id="certificates" class="relative py-32 lg:py-48 overflow-hidden">
+  <div class="orb orb-1" style="top: auto; bottom: -10%; right: -5%;"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10">
+    <div class="mb-16 lg:mb-24 reveal">
+      <span class="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">03</span>
+      <h2 class="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style="font-style: italic;">Certificates</h2>
+    </div>
+
+    <div class="max-w-3xl mx-auto relative">
+      <!-- Timeline line -->
+      <div class="absolute left-0 lg:left-8 top-0 bottom-0 w-[1px] bg-[rgba(255,255,255,.08)] hidden md:block"></div>
+
+      <div class="space-y-16">
+        <!-- SQL Basic -->
+        <div class="relative pl-0 md:pl-20 cert-item reveal-left">
+          <div class="hidden md:block timeline-line"></div>
+          <div class="flex flex-col md:flex-row gap-6 items-start">
+            <div class="w-full md:w-40 flex-shrink-0">
+              <img src="public/images/Certified/SQLbasic.png" alt="SQL (Basic)" class="w-full aspect-[3/2] object-cover border border-[rgba(255,255,255,.08)]" loading="lazy">
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[#1EA5FF] font-mono-custom text-xs tracking-wider uppercase">HackerRank</span>
+                <span class="text-[#8D8D8D] text-xs font-mono-custom">· 2026</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-[#F5F1EA] mb-2">SQL (Basic)</h3>
+              <p class="text-[#8D8D8D] text-sm mb-3">Issued May 2026</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">SQL</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cyber Security -->
+        <div class="relative pl-0 md:pl-20 cert-item reveal-right">
+          <div class="hidden md:block timeline-line"></div>
+          <div class="flex flex-col md:flex-row gap-6 items-start">
+            <div class="w-full md:w-40 flex-shrink-0">
+              <img src="public/images/Certified/cyber.png" alt="Introduction to Cyber Security" class="w-full aspect-[3/2] object-cover border border-[rgba(255,255,255,.08)]" loading="lazy">
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[#1EA5FF] font-mono-custom text-xs tracking-wider uppercase">Simplilearn</span>
+                <span class="text-[#8D8D8D] text-xs font-mono-custom">· 2026</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-[#F5F1EA] mb-2">Introduction to Cyber Security</h3>
+              <p class="text-[#8D8D8D] text-sm mb-3">Issued May 2026</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">Cyber Security</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Belajar Dasar Pemrograman Web -->
+        <div class="relative pl-0 md:pl-20 cert-item reveal-left">
+          <div class="hidden md:block timeline-line"></div>
+          <div class="flex flex-col md:flex-row gap-6 items-start">
+            <div class="w-full md:w-40 flex-shrink-0">
+              <img src="public/images/Certified/dasarpemrograman.png" alt="Belajar Dasar Pemrograman Web" class="w-full aspect-[3/2] object-cover border border-[rgba(255,255,255,.08)]" loading="lazy">
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[#1EA5FF] font-mono-custom text-xs tracking-wider uppercase">Dicoding Indonesia</span>
+                <span class="text-[#8D8D8D] text-xs font-mono-custom">· 2026</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-[#F5F1EA] mb-2">Belajar Dasar Pemrograman Web</h3>
+              <p class="text-[#8D8D8D] text-sm mb-3">Issued Jan 2026 · Valid until Jan 2029</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">Web Development</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Belajar Dasar AI -->
+        <div class="relative pl-0 md:pl-20 cert-item reveal-right">
+          <div class="hidden md:block timeline-line"></div>
+          <div class="flex flex-col md:flex-row gap-6 items-start">
+            <div class="w-full md:w-40 flex-shrink-0">
+              <img src="public/images/Certified/dasarai.jpg" alt="Belajar Dasar AI" class="w-full aspect-[3/2] object-cover border border-[rgba(255,255,255,.08)]" loading="lazy">
+            </div>
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="text-[#1EA5FF] font-mono-custom text-xs tracking-wider uppercase">Dicoding Indonesia</span>
+                <span class="text-[#8D8D8D] text-xs font-mono-custom">· 2025</span>
+              </div>
+              <h3 class="font-display text-2xl font-bold text-[#F5F1EA] mb-2">Belajar Dasar AI</h3>
+              <p class="text-[#8D8D8D] text-sm mb-3">Issued Oct 2025 · Valid until Oct 2028</p>
+              <div class="flex flex-wrap gap-2">
+                <span class="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">Artificial Intelligence</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="relative py-32 lg:py-48 min-h-screen flex items-center">
+  <div class="orb orb-2" style="bottom: auto; top: -10%;"></div>
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 w-full">
+    <!-- Kinetic typography for contact -->
+    <div class="relative mb-16 lg:mb-24 overflow-hidden">
+      <div class="font-display text-[clamp(3rem,12vw,10rem)] font-bold leading-[.85] text-center lg:text-right select-none reveal">
+        <span class="block text-[#F5F1EA]/5" aria-hidden="true" style="font-size: .6em; letter-spacing: -.03em; transform: translateY(30%);">CONTACT</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+      <!-- Left: Big text -->
+      <div class="reveal-left">
+        <h2 class="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[.9] text-[#F5F1EA] mb-8">
+          LET'S<br>
+          <span class="text-[#1EA5FF]">WORK</span><br>
+          TOGETHER
+        </h2>
+        <p class="text-lg text-[#8D8D8D] max-w-md leading-relaxed mb-8">
+          Have a project in mind? Let's create something extraordinary. I'm always open to discussing new ideas.
+        </p>
+
+        <!-- CTA -->
+        <a href="mailto:fiqihbadrian@gmail.com" class="group inline-flex items-center gap-3 px-8 py-4 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-all duration-300 hover:bg-[#0077CC] hover:gap-5">
+          Start a Conversation
+          <svg class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+        </a>
+      </div>
+
+      <!-- Right: Social links -->
+      <div class="reveal-right">
+        <div class="space-y-6">
+          <a href="mailto:fiqihbadrian@gmail.com" class="group flex items-center justify-between py-4 border-b border-[rgba(255,255,255,.08)] transition-all duration-300 hover:border-[#1EA5FF]">
+            <span class="text-sm uppercase tracking-wider text-[#8D8D8D] group-hover:text-[#F5F1EA] transition-colors">Email</span>
+            <span class="text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors font-medium">fiqihbadrian@gmail.com →</span>
+          </a>
+          <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between py-4 border-b border-[rgba(255,255,255,.08)] transition-all duration-300 hover:border-[#1EA5FF]">
+            <span class="text-sm uppercase tracking-wider text-[#8D8D8D] group-hover:text-[#F5F1EA] transition-colors">GitHub</span>
+            <span class="text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors font-medium">@fiqihbadrian →</span>
+          </a>
+          <a href="https://www.linkedin.com/in/fiqih-badrian-27b73b286" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between py-4 border-b border-[rgba(255,255,255,.08)] transition-all duration-300 hover:border-[#1EA5FF]">
+            <span class="text-sm uppercase tracking-wider text-[#8D8D8D] group-hover:text-[#F5F1EA] transition-colors">LinkedIn</span>
+            <span class="text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors font-medium">Fiqih Badrian →</span>
+          </a>
+          <a href="https://instagram.com/bian_bd" target="_blank" rel="noopener noreferrer" class="group flex items-center justify-between py-4 border-b border-[rgba(255,255,255,.08)] transition-all duration-300 hover:border-[#1EA5FF]">
+            <span class="text-sm uppercase tracking-wider text-[#8D8D8D] group-hover:text-[#F5F1EA] transition-colors">Instagram</span>
+            <span class="text-[#F5F1EA] group-hover:text-[#1EA5FF] transition-colors font-medium">@bian_bd →</span>
+          </a>
+        </div>
+
+        <!-- Decorative -->
+        <div class="mt-12 flex items-center gap-4">
+          <div class="h-[1px] flex-1 bg-[rgba(255,255,255,.08)]"></div>
+          <span class="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">Available for work</span>
+          <span class="w-2 h-2 rounded-full bg-[#1EA5FF] animate-pulse"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="relative py-12 border-t border-[rgba(255,255,255,.05)]">
+  <div class="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col md:flex-row items-center justify-between gap-4">
+    <p class="text-sm text-[#8D8D8D] font-mono-custom">
+      &copy; 2025 Fiqih Badrian. All rights reserved.
+    </p>
+    <div class="flex items-center gap-6">
+      <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" class="text-[#8D8D8D] hover:text-[#F5F1EA] transition-colors" aria-label="GitHub">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/fiqih-badrian-27b73b286" target="_blank" rel="noopener noreferrer" class="text-[#8D8D8D] hover:text-[#F5F1EA] transition-colors" aria-label="LinkedIn">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+      </a>
+      <a href="https://instagram.com/bian_bd" target="_blank" rel="noopener noreferrer" class="text-[#8D8D8D] hover:text-[#F5F1EA] transition-colors" aria-label="Instagram">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="#home" class="text-[#8D8D8D] hover:text-[#1EA5FF] transition-colors text-sm font-mono-custom" aria-label="Back to top">↑ Top</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Structured data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Fiqih Badrian",
+  "url": "https://www.fiqihbadrian.my.id",
+  "image": "https://www.fiqihbadrian.my.id/public/images/logo.png",
+  "jobTitle": "Frontend Engineer",
+  "sameAs": [
+    "https://github.com/fiqihbadrian",
+    "https://www.linkedin.com/in/fiqih-badrian-27b73b286",
+    "https://instagram.com/bian_bd"
+  ]
+}
+</script>
+
+<script>
+(function() {
+  'use strict';
+
+  // ===== SCROLL REVEAL =====
+  const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+  const observerOptions = { root: null, rootMargin: '0px 0px -80px 0px', threshold: 0.1 };
+
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  revealElements.forEach(el => revealObserver.observe(el));
+
+  // ===== HERO KINETIC PARALLAX =====
+  const heroKinetic = document.getElementById('heroKinetic');
+  if (heroKinetic) {
+    window.addEventListener('scroll', () => {
+      const scrollY = window.scrollY;
+      const maxScroll = window.innerHeight;
+      const progress = Math.min(scrollY / maxScroll, 1);
+      heroKinetic.style.transform = `translate(-50%, calc(-50% + ${progress * 60}px)) scale(${1 - progress * .08})`;
+      heroKinetic.style.opacity = 1 - progress * .6;
+    }, { passive: true });
+  }
+
+  // ===== CURSOR GLOW =====
+  const cursorGlow = document.getElementById('cursorGlow');
+  if (cursorGlow && window.matchMedia('(pointer: fine)').matches) {
+    let mouseX = -300, mouseY = -300;
+    let currentX = -300, currentY = -300;
+
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    function animateGlow() {
+      currentX += (mouseX - currentX) * 0.08;
+      currentY += (mouseY - currentY) * 0.08;
+      cursorGlow.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%,-50%)`;
+      requestAnimationFrame(animateGlow);
+    }
+    animateGlow();
+  }
+
+  // ===== IMAGE TILT ON MOUSE =====
+  const tiltContainers = document.querySelectorAll('.tilt-container');
+  if (tiltContainers.length > 0 && window.matchMedia('(pointer: fine)').matches) {
+    tiltContainers.forEach(container => {
+      const inner = container.querySelector('.tilt-inner');
+      if (!inner) return;
+
+      container.addEventListener('mousemove', (e) => {
+        const rect = container.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateY = ((x - centerX) / centerX) * 6;
+        const rotateX = ((centerY - y) / centerY) * 6;
+        inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      });
+
+      container.addEventListener('mouseleave', () => {
+        inner.style.transform = 'rotateX(0deg) rotateY(0deg)';
+      });
+    });
+  }
+
+  // ===== NAV SCROLL SPY =====
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('[x-data] a[href^="#"]');
+  let isScrolling = false;
+
+  // Use Alpine's x-data scope via dispatched custom event
+  function updateActiveSection(id) {
+    document.dispatchEvent(new CustomEvent('section-visible', { detail: { id } }));
+  }
+
+  const spyObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        updateActiveSection(entry.target.id);
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+
+  sections.forEach(s => spyObserver.observe(s));
+  document.addEventListener('section-visible', (e) => {
+    const alpineEl = document.querySelector('[x-data]');
+    if (alpineEl && alpineEl.__x) {
+      alpineEl.__x.$data.active = e.detail.id;
+    }
+  });
+
+  // ===== SMOOTH SCROLL FOR NAV (enhancement) =====
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      const href = this.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.querySelector(href);
+      if (target) {
+        e.preventDefault();
+        const offset = 80;
+        const top = target.getBoundingClientRect().top + window.scrollY - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ===== LAZY LOADING FOR IMAGES =====
+  const lazyImages = document.querySelectorAll('img[loading="lazy"]');
+  if ('loading' in HTMLImageElement.prototype) {
+    // Native lazy loading supported
+  } else {
+    // Fallback
+    const imgObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          img.src = img.src;
+          imgObserver.unobserve(img);
+        }
+      });
+    });
+    lazyImages.forEach(img => imgObserver.observe(img));
+  }
+})();
+</script>
+
+</body>
+</html>

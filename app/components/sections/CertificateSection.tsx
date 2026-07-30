@@ -1,98 +1,82 @@
-"use client";
+import Image from "next/image";
 
-import Image from 'next/image';
-import Link from 'next/link';
-
-type Certificate = {
-  name: string;
-  organization: string;
-  url: string;
-  credentialId: string;
-  issued: string;
-  valid?: string;
-  image: string;
-  skills: string;
-};
-
-const certificates: Certificate[] = [
+const certs = [
   {
-    name: "SQL (Basic)",
-    organization: "HackerRank",
-    url: "https://www.hackerrank.com/certificates/be32de179670",
-    credentialId: "be32de179670",
-    issued: "May 2026",
-    image: "/images/Certified/SQLbasic.png",
-    skills: "SQL",
+    org: "HackerRank",
+    orgColor: "#1EA5FF",
+    title: "SQL (Basic)",
+    date: "Issued May 2026",
+    year: "2026",
+    img: "/images/Certified/SQLbasic.png",
+    tags: ["SQL"],
   },
   {
-    name: "Introduction to Cyber Security",
-    organization: "Simplilearn",
-    url: "https://www.simplilearn.com/skillup-certificate-landing?token=eyJjb3Vyc2VfaWQiOiIxMjEzIiwiY2VydGlmaWNhdGVfdXJsIjoiaHR0cHM6XC9cL2NlcnRpZmljYXRlcy5zaW1wbGljZG4ubmV0XC9zaGFyZVwvMTAxOTQyNTRfMTA0NzkzOTNfMTc3ODA0Mzg0MzI2OS5wbmciLCJ1c2VybmFtZSI6IkZpcWloIEJhZHJpYW4ifQ%3D%3D&utm_source=shared-certificate&utm_medium=lms&utm_campaign=shared-certificate-promotion&referrer=https%3A%2F%2Flms.simplilearn.com%2Fcourses%2F3736%2FIntroduction-to-Cyber-Security%2Fcertificate%2Fdownload-skillup&%24web_only=true&_branch_match_id=1580467866977527482&_branch_referrer=H4sIAAAAAAAAA8soKSkottLXL87MLcjJ1EssKNDLyczL1k%2FVT7IwcIvMT3IMNUqyrytKTUstKsrMS49PKsovL04tsvUBqkpN8cwDAL1E0cJBAAAA",
-    credentialId: "10194254",
-    issued: "May 2026",
-    image: "/images/Certified/cyber.png",
-    skills: "Cyber Security",
+    org: "Simplilearn",
+    orgColor: "#1EA5FF",
+    title: "Introduction to Cyber Security",
+    date: "Issued May 2026",
+    year: "2026",
+    img: "/images/Certified/cyber.png",
+    tags: ["Cyber Security"],
   },
   {
-    name: "Belajar Dasar Pemrograman Web",
-    organization: "Dicoding Indonesia",
-    url: "https://www.dicoding.com/certificates/N9ZO28M1RPG5",
-    credentialId: "N9ZO28M1RPG5",
-    issued: "Jan 2026",
-    valid: "Jan 2029",
-    image: "/images/Certified/dasarpemrograman.png",
-    skills: "Web Development",
+    org: "Dicoding Indonesia",
+    orgColor: "#1EA5FF",
+    title: "Belajar Dasar Pemrograman Web",
+    date: "Issued Jan 2026 · Valid until Jan 2029",
+    year: "2026",
+    img: "/images/Certified/dasarpemrograman.png",
+    tags: ["Web Development"],
   },
   {
-    name: "Belajar Dasar AI",
-    organization: "Dicoding Indonesia",
-    url: "https://www.dicoding.com/certificates/KEXL21390ZG2",
-    credentialId: "KEXL21390ZG2",
-    issued: "Oct 2025",
-    valid: "Oct 2028",
-    image: "/images/Certified/dasarai.jpg",
-    skills: "Artificial Intelligence (AI)",
+    org: "Dicoding Indonesia",
+    orgColor: "#1EA5FF",
+    title: "Belajar Dasar AI",
+    date: "Issued Oct 2025 · Valid until Oct 2028",
+    year: "2025",
+    img: "/images/Certified/dasarai.jpg",
+    tags: ["Artificial Intelligence"],
   },
 ];
 
 export default function CertificateSection() {
   return (
-    <section className='py-16 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-purple-50 via-pink-50/50 to-pink-50 dark:from-gray-900 dark:via-slate-900 dark:to-gray-950'>
-      <div className="container mx-auto max-w-7xl">
-        <h2 className='text-3xl lg:text-4xl font-bold text-gray-900 dark:text-white text-center mb-10 transition-colors' data-aos="fade-up">
-          Certificate
-        </h2>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center'>
-          {certificates.map((cert) => (
-            <Link
-              key={cert.credentialId}
-              href={cert.url}
-              target='_blank'
-              rel='noopener noreferrer'
-              className='w-full max-w-sm'
-            >
-              <div className='bg-white dark:bg-[#1e2a47] p-6 rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col'>
-                <div className='relative w-full aspect-[3/2] mb-4 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800'>
-                  <Image
-                    src={cert.image}
-                    alt={`${cert.organization} - ${cert.name}`}
-                    fill
-                    className='object-cover'
-                    loading='lazy'
-                    quality={75}
-                    sizes='(max-width: 768px) 100vw, 300px'
-                  />
+    <section id="certificates" className="relative py-32 lg:py-48 overflow-hidden">
+      <div className="orb orb-1" style={{ top: "auto", bottom: "-10%", right: "-5%" }} />
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="mb-16 lg:mb-24">
+          <span className="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">03</span>
+          <h2 className="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style={{ fontStyle: "italic" }}>Certificates</h2>
+        </div>
+
+        <div className="max-w-3xl mx-auto relative">
+          <div className="absolute left-0 lg:left-8 top-0 bottom-0 w-[1px] bg-[rgba(255,255,255,.08)] hidden md:block" />
+
+          <div className="space-y-16">
+            {certs.map((c, i) => (
+              <div key={i} className={`relative pl-0 md:pl-20 cert-item ${i % 2 === 0 ? "" : ""}`}>
+                <div className="hidden md:block timeline-line" />
+                <div className="flex flex-col md:flex-row gap-6 items-start">
+                  <div className="w-full md:w-40 flex-shrink-0">
+                    <Image src={c.img} alt={c.title} width={240} height={160} className="w-full aspect-[3/2] object-cover border border-[rgba(255,255,255,.08)]" loading="lazy" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[#1EA5FF] font-mono-custom text-xs tracking-wider uppercase">{c.org}</span>
+                      <span className="text-[#8D8D8D] text-xs font-mono-custom">· {c.year}</span>
+                    </div>
+                    <h3 className="font-display text-2xl font-bold text-[#F5F1EA] mb-2">{c.title}</h3>
+                    <p className="text-[#8D8D8D] text-sm mb-3">{c.date}</p>
+                    <div className="flex flex-wrap gap-2">
+                      {c.tags.map((tag) => (
+                        <span key={tag} className="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">{tag}</span>
+                      ))}
+                    </div>
+                  </div>
                 </div>
-                <h3 className='text-lg font-semibold text-gray-900 dark:text-white transition-colors mb-2'>{cert.name}</h3>
-                <p className='text-sm text-gray-600 dark:text-gray-400 mb-2'>{cert.organization}</p>
-                <p className='text-xs text-gray-500 dark:text-gray-500 mb-2'>Issued: {cert.issued}</p>
-                {cert.valid && (
-                  <p className='text-xs text-gray-500 dark:text-gray-500 mb-2'>Valid until: {cert.valid}</p>
-                )}
-                <p className='text-xs text-purple-600 dark:text-purple-400 font-medium mt-auto'>{cert.skills}</p>
               </div>
-            </Link>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>
