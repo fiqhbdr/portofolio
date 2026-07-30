@@ -4,13 +4,13 @@ export default function ContactSection() {
       <div className="orb orb-2" style={{ bottom: "auto", top: "-10%" }} />
       <div className="max-w-7xl mx-auto px-6 lg:px-10 w-full">
         <div className="relative mb-16 lg:mb-24 overflow-hidden">
-          <div className="font-display text-[clamp(3rem,12vw,10rem)] font-bold leading-[.85] text-center lg:text-right select-none">
+          <div className="font-display text-[clamp(3rem,12vw,10rem)] font-bold leading-[.85] text-center lg:text-right select-none reveal">
             <span className="block text-[#F5F1EA]/5" aria-hidden="true" style={{ fontSize: ".6em", letterSpacing: "-.03em", transform: "translateY(30%)" }}>CONTACT</span>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
-          <div>
+          <div className="reveal-left">
             <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold leading-[.9] text-[#F5F1EA] mb-8">
               LET&apos;S<br />
               <span className="text-[#1EA5FF]">WORK</span><br />
@@ -25,7 +25,7 @@ export default function ContactSection() {
             </a>
           </div>
 
-          <div>
+          <div className="reveal-right">
             <div className="space-y-6">
               {[
                 { label: "Email", value: "fiqihbadrian@gmail.com", href: "mailto:fiqihbadrian@gmail.com" },

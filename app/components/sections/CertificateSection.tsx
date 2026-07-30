@@ -44,7 +44,7 @@ export default function CertificateSection() {
     <section id="certificates" className="relative py-32 lg:py-48 overflow-hidden">
       <div className="orb orb-1" style={{ top: "auto", bottom: "-10%", right: "-5%" }} />
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="mb-16 lg:mb-24">
+        <div className="mb-16 lg:mb-24 reveal">
           <span className="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">03</span>
           <h2 className="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style={{ fontStyle: "italic" }}>Certificates</h2>
         </div>
@@ -54,7 +54,7 @@ export default function CertificateSection() {
 
           <div className="space-y-16">
             {certs.map((c, i) => (
-              <div key={i} className={`relative pl-0 md:pl-20 cert-item ${i % 2 === 0 ? "" : ""}`}>
+              <div key={i} className={`relative pl-0 md:pl-20 cert-item ${i % 2 === 0 ? "reveal-left" : "reveal-right"}`}>
                 <div className="hidden md:block timeline-line" />
                 <div className="flex flex-col md:flex-row gap-6 items-start">
                   <div className="w-full md:w-40 flex-shrink-0">

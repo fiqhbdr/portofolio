@@ -10,26 +10,30 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      const scrollY = window.scrollY;
-      setScrolled(scrollY > 60);
-
-      // Scroll spy
-      let current = "home";
-      for (const id of sections) {
-        const el = document.getElementById(id);
-        if (el && el.offsetTop - 120 <= scrollY) current = id;
-      }
-      setActive(current);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+
+    // Listen for IntersectionObserver custom event from Interactivity
+    const onSectionVisible = (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail?.id) setActive(detail.id);
+    };
+    window.addEventListener("section-visible", onSectionVisible);
+
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("section-visible", onSectionVisible);
+    };
   }, []);
 
   const scrollTo = (id: string) => {
     setActive(id);
     setMobileOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    const target = document.getElementById(id);
+    if (target) {
+      const offset = 80;
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
+    }
   };
 
   return (

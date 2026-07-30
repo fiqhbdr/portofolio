@@ -4,72 +4,114 @@ import { useEffect } from "react";
 
 export default function Interactivity() {
   useEffect(() => {
-    // === CURSOR GLOW ===
-    const glow = document.getElementById("cursorGlow");
-    if (glow) {
-      const onMouse = (e: MouseEvent) => {
-        glow!.style.left = e.clientX + "px";
-        glow!.style.top = e.clientY + "px";
+    // === HERO KINETIC PARALLAX ===
+    const heroKinetic = document.getElementById("heroKinetic");
+    if (heroKinetic) {
+      const onScroll = () => {
+        const scrollY = window.scrollY;
+        const maxScroll = window.innerHeight;
+        const progress = Math.min(scrollY / maxScroll, 1);
+        heroKinetic.style.transform = `translate(-50%, calc(-50% + ${progress * 60}px)) scale(${1 - progress * 0.08})`;
+        heroKinetic.style.opacity = String(1 - progress * 0.6);
       };
-      window.addEventListener("mousemove", onMouse);
+      window.addEventListener("scroll", onScroll, { passive: true });
+    }
+
+    // === CURSOR GLOW ===
+    const cursorGlow = document.getElementById("cursorGlow");
+    if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
+      let mouseX = -300, mouseY = -300;
+      let currentX = -300, currentY = -300;
+
+      document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      const animateGlow = () => {
+        currentX += (mouseX - currentX) * 0.08;
+        currentY += (mouseY - currentY) * 0.08;
+        cursorGlow.style.transform = `translate(${currentX}px, ${currentY}px) translate(-50%,-50%)`;
+        requestAnimationFrame(animateGlow);
+      };
+      animateGlow();
     }
 
     // === SCROLL REVEAL ===
+    const revealElements = document.querySelectorAll(".reveal, .reveal-left, .reveal-right, .reveal-scale");
     const revealObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
+            revealObserver.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.1, rootMargin: "0px 0px -40px 0px" }
+      { rootMargin: "0px 0px -80px 0px", threshold: 0.1 }
     );
+    revealElements.forEach((el) => revealObserver.observe(el));
 
-    document.querySelectorAll(".reveal, .reveal-left, .reveal-right, .reveal-scale").forEach((el) => revealObserver.observe(el));
+    // === IMAGE TILT ===
+    if (window.matchMedia("(pointer: fine)").matches) {
+      document.querySelectorAll(".tilt-container").forEach((el) => {
+        const container = el as HTMLElement;
+        const inner = container.querySelector(".tilt-inner") as HTMLElement;
+        if (!inner) return;
 
-    // === PROJECT CARD TILT ===
-    document.querySelectorAll(".tilt-container").forEach((el) => {
-      const container = el as HTMLElement;
-      const inner = container.querySelector(".tilt-inner") as HTMLElement;
-      if (!inner) return;
-      let raf: number | null = null;
-      const current = { x: 0, y: 0 };
-      const target = { x: 0, y: 0 };
+        const onMove = (e: MouseEvent) => {
+          const rect = container.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateY = ((x - centerX) / centerX) * 6;
+          const rotateX = ((centerY - y) / centerY) * 6;
+          inner.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        };
 
-      const animate = () => {
-        const damping = 0.14;
-        current.x += (target.x - current.x) * damping;
-        current.y += (target.y - current.y) * damping;
-        inner.style.transform = `rotateX(${current.x}deg) rotateY(${current.y}deg)`;
-        if (Math.abs(target.x - current.x) > 0.01 || Math.abs(target.y - current.y) > 0.01) {
-          raf = requestAnimationFrame(animate);
-        } else {
-          raf = null;
+        const onLeave = () => {
+          inner.style.transform = "rotateX(0deg) rotateY(0deg)";
+        };
+
+        container.addEventListener("mousemove", onMove as EventListener);
+        container.addEventListener("mouseleave", onLeave as EventListener);
+      });
+    }
+
+    // === NAV SCROLL SPY ===
+    const sectionEls = document.querySelectorAll("section[id]");
+    const spyObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            // Dispatch custom event for Navbar to pick up
+            window.dispatchEvent(new CustomEvent("section-visible", { detail: { id: entry.target.id } }));
+          }
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    sectionEls.forEach((s) => spyObserver.observe(s));
+
+    // === SMOOTH SCROLL FOR ALL ANCHOR LINKS ===
+    document.querySelectorAll('a[href^="#"]').forEach((el) => {
+      const anchor = el as HTMLAnchorElement;
+      anchor.addEventListener("click", (e: MouseEvent) => {
+        const href = anchor.getAttribute("href");
+        if (!href || href === "#") return;
+        const target = document.getElementById(href.slice(1));
+        if (target) {
+          e.preventDefault();
+          const offset = 80;
+          window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: "smooth" });
         }
-      };
-
-      const onMove = (e: MouseEvent) => {
-        const rect = container.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        target.x = ((y - rect.height / 2) / rect.height / 2) * 8;
-        target.y = ((x - rect.width / 2) / rect.width / 2) * -8;
-        if (!raf) raf = requestAnimationFrame(animate);
-      };
-
-      const onLeave = () => {
-        target.x = 0;
-        target.y = 0;
-        if (!raf) raf = requestAnimationFrame(animate);
-      };
-
-      container.addEventListener("mousemove", onMove as EventListener);
-      container.addEventListener("mouseleave", onLeave as EventListener);
+      });
     });
 
     return () => {
       revealObserver.disconnect();
+      spyObserver.disconnect();
     };
   }, []);
 

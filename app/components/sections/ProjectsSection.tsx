@@ -128,7 +128,7 @@ function Slideshow({ slides }: { slides: string[] }) {
 
 function ProjectCard({ p, delay }: { p: any; delay: number }) {
   return (
-    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block" style={{ animationDelay: `${delay}ms` }}>
+    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block reveal" style={{ transitionDelay: `${delay}ms` }}>
       <div className="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
         {p.slides ? (
           <Slideshow slides={p.slides} />
@@ -172,12 +172,12 @@ export default function ProjectsSection() {
   return (
     <section id="projects" className="relative py-32 lg:py-48">
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="mb-12 lg:mb-16">
+        <div className="mb-12 lg:mb-16 reveal">
           <span className="font-mono-custom text-xs tracking-[.2em] uppercase text-[#8D8D8D]">02</span>
           <h2 className="font-display text-6xl lg:text-8xl font-bold text-[#F5F1EA] mt-2" style={{ fontStyle: "italic" }}>Projects</h2>
         </div>
 
-        <div className="flex flex-wrap gap-2 mb-12 border-b border-[rgba(255,255,255,.06)] pb-4">
+        <div className="flex flex-wrap gap-2 mb-12 reveal border-b border-[rgba(255,255,255,.06)] pb-4">
           {tabs.map((t) => (
             <button
               key={t.key}
@@ -227,7 +227,7 @@ export default function ProjectsSection() {
         )}
 
         {/* See More */}
-        <div className="mt-10 text-center">
+        <div className="mt-10 text-center reveal">
           <a href="https://github.com/fiqihbadrian" target="_blank" rel="noopener noreferrer" className="group inline-flex items-center gap-2 px-8 py-4 border border-[rgba(255,255,255,.15)] text-sm text-[#F5F1EA] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.3)] hover:gap-4">
             See More Projects
             <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
