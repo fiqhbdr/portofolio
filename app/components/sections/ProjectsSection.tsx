@@ -12,10 +12,7 @@ const projects = {
       lang: "TypeScript",
       langColor: "#3178c6",
       stars: 0,
-      slides: [
-        "https://github.com/user-attachments/assets/44155afe-1d21-445a-a1ac-17c1741d05a4",
-        "https://github.com/user-attachments/assets/245666de-e817-49b5-8fb4-40366b7e7b65",
-      ],
+      slides: ["/images/projects/zxwdb-1.png", "/images/projects/zxwdb-2.png"],
     },
     {
       name: "Soalin Quiz",
