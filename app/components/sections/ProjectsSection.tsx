@@ -35,15 +35,6 @@ const projects = {
   ],
   web: [
     {
-      name: "acc-jambu-2",
-      desc: "E-commerce printer Aneka Citra Computer. Next.js 16 + Prisma + JWT + Xendit sandbox.",
-      url: "https://github.com/fiqihbadrian/acc-jambu-2",
-      lang: "TypeScript",
-      langColor: "#3178c6",
-      stars: 2,
-      slides: ["/images/projects/acc-jambu-home.png", "/images/projects/acc-jambu-login.png", "/images/projects/acc-jambu-dashboard.png", "/images/projects/acc-jambu-edit.png", "/images/projects/acc-jambu-admin.png"],
-    },
-    {
       name: "Azxchat",
       desc: "Chat web using Next.js and Socket.IO.",
       url: "https://github.com/fiqihbadrian/Azxchat",
@@ -60,6 +51,15 @@ const projects = {
       langColor: "#f1e05a",
       stars: 0,
       slides: ["/images/projects/dekstop.png", "/images/projects/login.png", "/images/projects/upload.png"],
+    },
+    {
+      name: "nine-landing",
+      desc: "Landing page untuk nine (PHP).",
+      url: "https://github.com/fiqihbadrian/nine-landing",
+      lang: "PHP",
+      langColor: "#4F5D95",
+      stars: 0,
+      img: "https://opengraph.githubassets.com/1/fiqihbadrian/nine-landing",
     },
   ],
   app: [
