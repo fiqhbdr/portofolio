@@ -30,7 +30,7 @@ const projects = {
       lang: "Swift",
       langColor: "#ff4500",
       stars: 1,
-      img: "https://opengraph.githubassets.com/1/fiqihbadrian/Markdown-Viewer",
+      img: "/images/projects/markdown-viewer.png",
     },
   ],
   web: [
