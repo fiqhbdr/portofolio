@@ -37,6 +37,24 @@ const certs = [
     img: "/images/Certified/dasarai.jpg",
     tags: ["Artificial Intelligence"],
   },
+  {
+    org: "UBSI Bogor",
+    orgColor: "#1EA5FF",
+    title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
+    date: "2026",
+    year: "2026",
+    img: "/images/Certified/Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data - UBSI Bogor 2026.png",
+    tags: ["Database", "SQL"],
+  },
+  {
+    org: "Microsoft",
+    orgColor: "#1EA5FF",
+    title: "Penerapan Data Science dengan Microsoft Fabric",
+    date: "2026",
+    year: "2026",
+    img: "/images/Certified/Penerapan Data Science dengan Microsoft Fabric.png",
+    tags: ["Data Science", "Microsoft Fabric"],
+  },
 ];
 
 export default function CertificateSection() {
