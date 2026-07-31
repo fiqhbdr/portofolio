@@ -2,6 +2,18 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Modal from "../Modal";
+
+type Project = {
+  name: string;
+  desc: string;
+  url: string;
+  lang: string;
+  langColor: string;
+  stars: number;
+  slides?: string[];
+  img?: string;
+};
 
 const projects = {
   featured: [
@@ -126,9 +138,9 @@ function Slideshow({ slides }: { slides: string[] }) {
   );
 }
 
-function ProjectCard({ p }: { p: any; delay: number }) {
+function ProjectCard({ p, onSelect }: { p: Project; onSelect: (p: Project) => void }) {
   return (
-    <a href={p.url} target="_blank" rel="noopener noreferrer" className="group block" style={{ animation: `fadeIn .5s ease-out both` }}>
+    <button type="button" onClick={() => onSelect(p)} className="group block w-full text-left cursor-pointer" style={{ animation: `fadeIn .5s ease-out both` }}>
       <div className="relative overflow-hidden border border-[rgba(255,255,255,.08)] bg-[rgba(255,255,255,.02)] transition-all duration-500 hover:bg-[rgba(255,255,255,.04)] hover:border-[rgba(255,255,255,.15)] hover:-translate-y-1">
         {p.slides ? (
           <Slideshow slides={p.slides} />
@@ -155,7 +167,7 @@ function ProjectCard({ p }: { p: any; delay: number }) {
           </div>
         </div>
       </div>
-    </a>
+    </button>
   );
 }
 
@@ -168,6 +180,7 @@ const tabs: { key: Tab; label: string; accent: string }[] = [
 
 export default function ProjectsSection() {
   const [tab, setTab] = useState<Tab>("featured");
+  const [selected, setSelected] = useState<Project | null>(null);
 
   return (
     <section id="projects" className="relative py-32 lg:py-48">
@@ -198,21 +211,21 @@ export default function ProjectsSection() {
         {/* Tab content: featured */}
         {tab === "featured" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.featured.map((p, i) => <ProjectCard key={p.name} p={p} delay={i * 100} />)}
+            {projects.featured.map((p, i) => <ProjectCard key={p.name} p={p} onSelect={setSelected} />)}
           </div>
         )}
 
         {/* Tab content: web */}
         {tab === "web" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.web.map((p, i) => <ProjectCard key={p.name + i} p={p} delay={i * 100} />)}
+            {projects.web.map((p, i) => <ProjectCard key={p.name + i} p={p} onSelect={setSelected} />)}
           </div>
         )}
 
         {/* Tab content: app */}
         {tab === "app" && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.app.map((p, i) => <ProjectCard key={p.name + i} p={p} delay={i * 100} />)}
+            {projects.app.map((p, i) => <ProjectCard key={p.name + i} p={p} onSelect={setSelected} />)}
           </div>
         )}
 
@@ -234,6 +247,38 @@ export default function ProjectsSection() {
           </a>
         </div>
       </div>
+
+      <Modal open={selected !== null} onClose={() => setSelected(null)}>
+        {selected && (
+          <div>
+            {selected.slides ? (
+              <Slideshow slides={selected.slides} />
+            ) : (
+              <div className="aspect-[16/10] relative bg-[rgba(255,255,255,.03)] overflow-hidden">
+                <img src={selected.img} alt={selected.name} className="w-full h-full object-cover" />
+              </div>
+            )}
+            <div className="p-8">
+              <h3 className="font-display text-3xl font-bold text-[#F5F1EA] mb-3">{selected.name}</h3>
+              <div className="flex items-center gap-4 text-xs text-[#8D8D8D] font-mono-custom mb-4">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: selected.langColor }} />
+                  {selected.lang}
+                </span>
+                <span className="flex items-center gap-1">
+                  <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+                  {selected.stars}
+                </span>
+              </div>
+              <p className="text-[#8D8D8D] leading-relaxed mb-8">{selected.desc}</p>
+              <a href={selected.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-[#0077CC]">
+                Buka Project
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </a>
+            </div>
+          </div>
+        )}
+      </Modal>
     </section>
   );
 }
