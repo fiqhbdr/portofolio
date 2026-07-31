@@ -38,7 +38,7 @@ const certs = [
     tags: ["Artificial Intelligence"],
   },
   {
-    org: "UBSI Bogor",
+    org: "InerCorp",
     orgColor: "#1EA5FF",
     title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
     date: "2026",
@@ -47,7 +47,7 @@ const certs = [
     tags: ["Database", "SQL"],
   },
   {
-    org: "Microsoft",
+    org: "Dicoding Indonesia",
     orgColor: "#1EA5FF",
     title: "Penerapan Data Science dengan Microsoft Fabric",
     date: "2026",
