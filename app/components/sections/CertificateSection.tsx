@@ -2,6 +2,24 @@ import Image from "next/image";
 
 const certs = [
   {
+    org: "InerCorp",
+    orgColor: "#1EA5FF",
+    title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
+    date: "2026",
+    year: "2026",
+    img: "/images/Certified/Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data - UBSI Bogor 2026.png",
+    tags: ["Database", "SQL"],
+  },
+  {
+    org: "Dicoding Indonesia",
+    orgColor: "#1EA5FF",
+    title: "Penerapan Data Science dengan Microsoft Fabric",
+    date: "2026",
+    year: "2026",
+    img: "/images/Certified/Penerapan Data Science dengan Microsoft Fabric.png",
+    tags: ["Data Science", "Microsoft Fabric"],
+  },
+  {
     org: "HackerRank",
     orgColor: "#1EA5FF",
     title: "SQL (Basic)",
@@ -36,24 +54,6 @@ const certs = [
     year: "2025",
     img: "/images/Certified/dasarai.jpg",
     tags: ["Artificial Intelligence"],
-  },
-  {
-    org: "InerCorp",
-    orgColor: "#1EA5FF",
-    title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
-    date: "2026",
-    year: "2026",
-    img: "/images/Certified/Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data - UBSI Bogor 2026.png",
-    tags: ["Database", "SQL"],
-  },
-  {
-    org: "Dicoding Indonesia",
-    orgColor: "#1EA5FF",
-    title: "Penerapan Data Science dengan Microsoft Fabric",
-    date: "2026",
-    year: "2026",
-    img: "/images/Certified/Penerapan Data Science dengan Microsoft Fabric.png",
-    tags: ["Data Science", "Microsoft Fabric"],
   },
 ];
 
