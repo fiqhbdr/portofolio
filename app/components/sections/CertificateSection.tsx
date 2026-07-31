@@ -4,62 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Modal from "../Modal";
 
-const certs = [
-  {
-    org: "InerCorp",
-    orgColor: "#1EA5FF",
-    title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
-    date: "2026",
-    year: "2026",
-    img: "/images/Certified/Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data - UBSI Bogor 2026.png",
-    tags: ["Database", "SQL"],
-  },
-  {
-    org: "Dicoding Indonesia",
-    orgColor: "#1EA5FF",
-    title: "Penerapan Data Science dengan Microsoft Fabric",
-    date: "2026",
-    year: "2026",
-    img: "/images/Certified/Penerapan Data Science dengan Microsoft Fabric.png",
-    tags: ["Data Science", "Microsoft Fabric"],
-  },
-  {
-    org: "HackerRank",
-    orgColor: "#1EA5FF",
-    title: "SQL (Basic)",
-    date: "Issued May 2026",
-    year: "2026",
-    img: "/images/Certified/SQLbasic.png",
-    tags: ["SQL"],
-  },
-  {
-    org: "Simplilearn",
-    orgColor: "#1EA5FF",
-    title: "Introduction to Cyber Security",
-    date: "Issued May 2026",
-    year: "2026",
-    img: "/images/Certified/cyber.png",
-    tags: ["Cyber Security"],
-  },
-  {
-    org: "Dicoding Indonesia",
-    orgColor: "#1EA5FF",
-    title: "Belajar Dasar Pemrograman Web",
-    date: "Issued Jan 2026 · Valid until Jan 2029",
-    year: "2026",
-    img: "/images/Certified/dasarpemrograman.png",
-    tags: ["Web Development"],
-  },
-  {
-    org: "Dicoding Indonesia",
-    orgColor: "#1EA5FF",
-    title: "Belajar Dasar AI",
-    date: "Issued Oct 2025 · Valid until Oct 2028",
-    year: "2025",
-    img: "/images/Certified/dasarai.jpg",
-    tags: ["Artificial Intelligence"],
-  },
-];
+import certs from "@/data/certificates.json";
 
 export default function CertificateSection() {
   const [selected, setSelected] = useState<(typeof certs)[number] | null>(null);
@@ -127,7 +72,7 @@ export default function CertificateSection() {
                   <span key={tag} className="px-3 py-1 text-xs font-mono-custom border border-[rgba(255,255,255,.1)] text-[#8D8D8D]">{tag}</span>
                 ))}
               </div>
-              <a href={selected.img} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-[#0077CC]">
+              <a href={selected.url || selected.img} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-6 py-3 bg-[#1EA5FF] text-[#0A0A0A] font-semibold text-sm uppercase tracking-wider transition-colors hover:bg-[#0077CC]">
                 Buka Sertifikat
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
               </a>

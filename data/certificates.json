@@ -1,0 +1,62 @@
+[
+  {
+    "org": "InerCorp",
+    "orgColor": "#1EA5FF",
+    "title": "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
+    "date": "2026",
+    "year": "2026",
+    "img": "/images/Certified/Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data - UBSI Bogor 2026.png",
+    "url": "",
+    "tags": ["Database", "SQL"]
+  },
+  {
+    "org": "Dicoding Indonesia",
+    "orgColor": "#1EA5FF",
+    "title": "Penerapan Data Science dengan Microsoft Fabric",
+    "date": "2026",
+    "year": "2026",
+    "img": "/images/Certified/Penerapan Data Science dengan Microsoft Fabric.png",
+    "url": "",
+    "tags": ["Data Science", "Microsoft Fabric"]
+  },
+  {
+    "org": "HackerRank",
+    "orgColor": "#1EA5FF",
+    "title": "SQL (Basic)",
+    "date": "Issued May 2026",
+    "year": "2026",
+    "img": "/images/Certified/SQLbasic.png",
+    "url": "",
+    "tags": ["SQL"]
+  },
+  {
+    "org": "Simplilearn",
+    "orgColor": "#1EA5FF",
+    "title": "Introduction to Cyber Security",
+    "date": "Issued May 2026",
+    "year": "2026",
+    "img": "/images/Certified/cyber.png",
+    "url": "",
+    "tags": ["Cyber Security"]
+  },
+  {
+    "org": "Dicoding Indonesia",
+    "orgColor": "#1EA5FF",
+    "title": "Belajar Dasar Pemrograman Web",
+    "date": "Issued Jan 2026 · Valid until Jan 2029",
+    "year": "2026",
+    "img": "/images/Certified/dasarpemrograman.png",
+    "url": "",  
+    "tags": ["Web Development"]
+  },
+  {
+    "org": "Dicoding Indonesia",
+    "orgColor": "#1EA5FF",
+    "title": "Belajar Dasar AI",
+    "date": "Issued Oct 2025 · Valid until Oct 2028",
+    "year": "2025",
+    "img": "/images/Certified/dasarai.jpg",
+    "url": "",
+    "tags": ["Artificial Intelligence"]
+  }
+]

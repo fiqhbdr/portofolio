@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Modal from "../Modal";
+import projects from "@/data/projects.json";
+
+type Tab = "featured" | "web" | "app" | "design";
 
 type Project = {
   name: string;
@@ -14,98 +17,6 @@ type Project = {
   slides?: string[];
   img?: string;
 };
-
-const projects = {
-  featured: [
-    {
-      name: "ZxwDB",
-      desc: "Design and visualize MySQL/MariaDB databases effortlessly — Visual ERD tool with auto-detect relationships and modern interface.",
-      url: "https://github.com/fiqihbadrian/ZxwDB",
-      lang: "TypeScript",
-      langColor: "#3178c6",
-      stars: 0,
-      slides: ["/images/projects/zxwdb-1.png", "/images/projects/zxwdb-2.png"],
-    },
-    {
-      name: "Soalin Quiz",
-      desc: "Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.",
-      url: "https://github.com/fiqihbadrian/Soalin-Quiz",
-      lang: "JavaScript",
-      langColor: "#f1e05a",
-      stars: 0,
-      slides: ["/images/projects/dekstop.png", "/images/projects/login.png", "/images/projects/upload.png"],
-    },
-    {
-      name: "Markdown Viewer",
-      desc: "A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.",
-      url: "https://github.com/fiqihbadrian/Markdown-Viewer",
-      lang: "Swift",
-      langColor: "#ff4500",
-      stars: 1,
-      img: "/images/projects/markdown-viewer.png",
-    },
-  ],
-  web: [
-    {
-      name: "Azxchat",
-      desc: "Chat web using Next.js and Socket.IO.",
-      url: "https://github.com/fiqihbadrian/Azxchat",
-      lang: "JavaScript",
-      langColor: "#f1e05a",
-      stars: 2,
-      slides: ["/images/projects/azxchat-1.png", "/images/projects/azxchat-2.png"],
-    },
-    {
-      name: "Soalin Quiz",
-      desc: "Soalin membantu pengguna belajar lebih cepat dengan cara mengubah materi kuliah (PDF) menjadi kuis pilihan ganda secara otomatis.",
-      url: "https://github.com/fiqihbadrian/Soalin-Quiz",
-      lang: "JavaScript",
-      langColor: "#f1e05a",
-      stars: 0,
-      slides: ["/images/projects/dekstop.png", "/images/projects/login.png", "/images/projects/upload.png"],
-    },
-    {
-      name: "nine-landing",
-      desc: "Landing page untuk nine (PHP).",
-      url: "https://github.com/fiqihbadrian/nine-landing",
-      lang: "PHP",
-      langColor: "#4F5D95",
-      stars: 0,
-      img: "https://opengraph.githubassets.com/1/fiqihbadrian/nine-landing",
-    },
-  ],
-  app: [
-    {
-      name: "Flutter Rubik3D",
-      desc: "Interactive 3D Rubik's Cube application built with Flutter. Smooth rotation animations, touch gesture controls, scramble & reset.",
-      url: "https://github.com/fiqihbadrian/flutter-rubik3d",
-      lang: "Flutter",
-      langColor: "#02569B",
-      stars: 0,
-      img: "https://opengraph.githubassets.com/1/fiqihbadrian/flutter-rubik3d",
-    },
-    {
-      name: "Markdown Viewer",
-      desc: "A lightweight and fast Markdown viewer for macOS with GitHub-style rendering.",
-      url: "https://github.com/fiqihbadrian/Markdown-Viewer",
-      lang: "Swift",
-      langColor: "#ff4500",
-      stars: 1,
-      img: "/images/projects/markdown-viewer.png",
-    },
-    {
-      name: "MyUang",
-      desc: "Aplikasi manajemen keuangan pribadi — catat transaksi, multi-wallet, analitik & laporan, backup & restore, 100% offline.",
-      url: "https://github.com/fiqihbadrian/MyUang",
-      lang: "Flutter",
-      langColor: "#02569B",
-      stars: 0,
-      img: "https://opengraph.githubassets.com/1/fiqihbadrian/MyUang",
-    },
-  ],
-};
-
-type Tab = "featured" | "web" | "app" | "design";
 
 function Slideshow({ slides }: { slides: string[] }) {
   const [slide, setSlide] = useState(0);
