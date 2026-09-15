@@ -9,6 +9,7 @@ const nextConfig = {
     // the route in the deployment output.
     outputFileTracingIncludes: {
       "/opengraph-image": ["./assets/og/**/*"],
+      "/projects/[slug]/opengraph-image": ["./assets/og/**/*"],
     },
   },
 };
