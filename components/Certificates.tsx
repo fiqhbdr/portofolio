@@ -5,9 +5,23 @@ export default function Certificates() {
   return (
     <section className="content-wrap py-20 md:py-28">
       <Reveal>
-        <h2 className="text-[13px] font-medium tracking-wide text-muted">
-          Certificates
-        </h2>
+        <div className="flex items-center justify-between gap-4">
+          <h2 className="text-[13px] font-medium tracking-wide text-muted">
+            Certificates
+          </h2>
+
+          {/* Deep link into the LinkedIn certifications section, so the list
+              here stays a summary while the full set lives in one place. */}
+          <a
+            href="https://www.linkedin.com/in/fiqih-badrian-27b73b286/details/certifications/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex shrink-0 items-center gap-1 text-[13px] text-muted transition-colors duration-250 hover:text-ink hover:underline"
+          >
+            See all on LinkedIn
+            <span aria-hidden>↗</span>
+          </a>
+        </div>
       </Reveal>
 
       <div className="mt-8 border-t border-line">
