@@ -1,6 +1,17 @@
 import ContactForm from "./ContactForm";
 import Reveal from "./Reveal";
 
+/*
+  These three lines are the facts a stranger wants before writing: whether you
+  are taking work, how long a reply takes, and what time zone they are dealing
+  with. Edit them here; nothing else has to change.
+*/
+const AVAILABILITY = [
+  { label: "Status", value: "Open to internships and freelance work" },
+  { label: "Reply time", value: "Usually within a day" },
+  { label: "Location", value: "Indonesia (GMT+7)" },
+];
+
 export default function Contact() {
   return (
     <section className="content-wrap py-20 md:py-28">
@@ -48,6 +59,23 @@ export default function Contact() {
           >
             Instagram <span aria-hidden>↗</span>
           </a>
+        </div>
+
+        {/* Fills the space the form's height leaves under this column, and
+            puts the useful facts where someone deciding to write will see
+            them. */}
+        <div className="mt-10">
+          <h3 className="text-[13px] font-medium tracking-wide text-muted">
+            Availability
+          </h3>
+          <dl className="mt-4 space-y-4">
+            {AVAILABILITY.map(({ label, value }) => (
+              <div key={label}>
+                <dt className="text-[13px] text-muted">{label}</dt>
+                <dd className="mt-1 text-[15px] text-ink">{value}</dd>
+              </div>
+            ))}
+          </dl>
         </div>
         </Reveal>
 
