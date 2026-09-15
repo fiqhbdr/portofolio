@@ -35,6 +35,13 @@
     outline-offset: 3px;
     border-radius: 6px;
   }
+
+  /* Form controls keep their own 10px radius, so the outline is left to follow
+     the element rather than being forced square-ish like the rule above. */
+  input:focus-visible, textarea:focus-visible {
+    outline: 2px solid #A8D8FF;
+    outline-offset: 3px;
+  }
 }
 
 @layer utilities {

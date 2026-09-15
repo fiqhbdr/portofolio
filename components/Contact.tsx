@@ -1,12 +1,17 @@
+import ContactForm from "./ContactForm";
 import Reveal from "./Reveal";
 
 export default function Contact() {
   return (
     <section className="content-wrap py-20 md:py-28">
-      <Reveal>
-        <h2 className="max-w-[20ch] text-[28px] leading-snug font-semibold text-ink md:text-[36px]">
-          Have an idea? Let&apos;s build something useful.
-        </h2>
+      {/* Two columns from lg up so the form sits beside the heading rather than
+          under it. Below that the heading would be squeezed into half the
+          width, so they stack instead. */}
+      <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
+        <Reveal>
+          <h2 className="max-w-[20ch] text-[28px] leading-snug font-semibold text-ink md:text-[36px]">
+            Have an idea? Let&apos;s build something useful.
+          </h2>
 
         <div className="mt-7 flex flex-wrap items-center gap-x-8 gap-y-3 text-[15px]">
           <a
@@ -44,7 +49,12 @@ export default function Contact() {
             Instagram <span aria-hidden>↗</span>
           </a>
         </div>
-      </Reveal>
+        </Reveal>
+
+        <Reveal delay={60}>
+          <ContactForm />
+        </Reveal>
+      </div>
     </section>
   );
 }
