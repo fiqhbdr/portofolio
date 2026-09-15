@@ -24,6 +24,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [notice, setNotice] = useState("");
   const [token, setToken] = useState("");
+  const [captchaFailed, setCaptchaFailed] = useState(false);
   const captcha = useRef<HCaptcha>(null);
   const sending = status === "sending";
   const ready = Boolean(token) && Boolean(WEB3FORMS_KEY);
@@ -167,9 +168,10 @@ export default function ContactForm() {
       {/*
         Compact rather than the default size: the default frame is 302px wide
         and the form is only 224px wide inside at 320px, so it would spill past
-        the border. Compact is 158px.
+        the border. Compact is 158x138, and the height is reserved up front so
+        the form does not jump the moment the script lands.
       */}
-      <div className="mt-6">
+      <div className="mt-6 min-h-[138px]">
         <HCaptcha
           ref={captcha}
           sitekey={HCAPTCHA_SITEKEY}
@@ -178,7 +180,10 @@ export default function ContactForm() {
           size="compact"
           onVerify={onVerify}
           onExpire={() => setToken("")}
-          onError={() => setToken("")}
+          onError={() => {
+            setToken("");
+            setCaptchaFailed(true);
+          }}
         />
       </div>
 
@@ -204,7 +209,9 @@ export default function ContactForm() {
             "Thanks, that arrived. I reply to everything, usually within a day."}
           {!sending && status === "error" && notice}
           {!sending && status === "idle" && !token &&
-            "Complete the check above to send."}
+            (captchaFailed
+              ? "The check could not load. Use the email link above instead."
+              : "Complete the check above to send.")}
         </p>
       </div>
 
