@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { WEB3FORMS_KEY } from "@/lib/contact";
 
@@ -18,6 +18,16 @@ const LABEL = "mb-2 block text-[13px] font-medium text-muted";
 const FIELD =
   "w-full rounded-[10px] border border-line bg-surface px-4 py-3 text-[15px] text-ink transition-colors duration-250 placeholder:text-muted/80 focus:border-accent";
 
+// hCaptcha ships two checkbox shapes and neither is free-form: the default is a
+// 302x76 strip, compact is a 158x138 block. The strip is the nicer shape for a
+// wide form, but it does not fit the 224px of room the form has inside at
+// 320px, so the form measures itself and falls back to the block when it must.
+// Both heights are reserved up front so the form does not jump when the script
+// lands.
+const CAPTCHA_STRIP_WIDTH = 302;
+const CAPTCHA_STRIP_HEIGHT = 76;
+const CAPTCHA_BLOCK_HEIGHT = 138;
+
 type Status = "idle" | "sending" | "sent" | "error";
 
 export default function ContactForm() {
@@ -25,9 +35,32 @@ export default function ContactForm() {
   const [notice, setNotice] = useState("");
   const [token, setToken] = useState("");
   const [captchaFailed, setCaptchaFailed] = useState(false);
+  const [strip, setStrip] = useState(false);
   const captcha = useRef<HCaptcha>(null);
+  const captchaBox = useRef<HTMLDivElement>(null);
   const sending = status === "sending";
   const ready = Boolean(token) && Boolean(WEB3FORMS_KEY);
+  const size = strip ? "normal" : "compact";
+
+  // Measured rather than inferred from a breakpoint, because how much room the
+  // form has inside depends on its own padding and on the column it lands in.
+  useEffect(() => {
+    const box = captchaBox.current;
+    if (!box) return;
+
+    const measure = () => setStrip(box.clientWidth >= CAPTCHA_STRIP_WIDTH);
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(box);
+    return () => observer.disconnect();
+  }, []);
+
+  // Crossing the threshold swaps in a fresh, unsolved widget, so a token solved
+  // before the resize no longer matches what is on screen.
+  useEffect(() => {
+    setToken("");
+  }, [size]);
 
   // A solved token is single use, so once the server has read one the widget is
   // holding a spent value. Clearing it asks for a fresh solve rather than
@@ -166,18 +199,24 @@ export default function ContactForm() {
       />
 
       {/*
-        Compact rather than the default size: the default frame is 302px wide
-        and the form is only 224px wide inside at 320px, so it would spill past
-        the border. Compact is 158x138, and the height is reserved up front so
-        the form does not jump the moment the script lands.
+        The key remounts the widget when the shape changes. The library does
+        handle a size change itself, but it does so through a
+        shouldComponentUpdate that reads backwards; a remount is the one path
+        whose behaviour is plain React. The script is cached per window, so
+        nothing is fetched twice.
       */}
-      <div className="mt-6 min-h-[138px]">
+      <div
+        ref={captchaBox}
+        className="mt-6"
+        style={{ minHeight: strip ? CAPTCHA_STRIP_HEIGHT : CAPTCHA_BLOCK_HEIGHT }}
+      >
         <HCaptcha
+          key={size}
           ref={captcha}
           sitekey={HCAPTCHA_SITEKEY}
           reCaptchaCompat={false}
           theme="dark"
-          size="compact"
+          size={size}
           onVerify={onVerify}
           onExpire={() => setToken("")}
           onError={() => {
