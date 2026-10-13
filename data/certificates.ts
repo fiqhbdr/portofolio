@@ -11,6 +11,15 @@ export type Certificate = {
 // Certificates, most recent first.
 export const certificates: Certificate[] = [
   {
+    slug: "hackathon",
+    org: "Hacktiv8 Indonesia",
+    title: "Data - AI Agent for Data Analysis",
+    year: "2026",
+    date: "2026",
+    tags: ["LangFlow", "IBM Bob", "Data Analysis", "AI Agent"],
+    url: "https://students.hacktiv8.com/certificates/1bf02cae-e7c8-42b5-bb87-0a0099b8ef09",
+  },
+  {
     slug: "inercorp-basis-data",
     org: "InerCorp",
     title: "Uji Profisiensi Berbasis Industri Keilmuan Sistem Basis Data",
