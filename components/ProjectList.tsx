@@ -1,5 +1,5 @@
 import { projects } from "@/data/projects";
-import ProjectItem from "./ProjectItem";
+import ProjectFilter from "./ProjectFilter";
 import Reveal from "./Reveal";
 
 export default function ProjectList() {
@@ -27,13 +27,7 @@ export default function ProjectList() {
         </div>
       </Reveal>
 
-      <div className="mt-8 border-t border-line">
-        {projects.map((project, i) => (
-          <Reveal key={project.slug} delay={i * 60}>
-            <ProjectItem project={project} />
-          </Reveal>
-        ))}
-      </div>
+      <ProjectFilter projects={projects} />
     </section>
   );
 }
