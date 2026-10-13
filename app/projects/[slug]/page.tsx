@@ -1,7 +1,8 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { projects, getProjectBySlug } from "@/data/projects";
+import { projects, getProjectBySlug, projectCoverSrc } from "@/data/projects";
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -67,6 +68,19 @@ export default function ProjectPage({
           </p>
         )}
       </header>
+
+      {/* The cover is the largest thing on the page and sits above the fold on a
+          phone, so it is fetched with the document instead of being discovered
+          late by the lazy loader. */}
+      <Image
+        src={projectCoverSrc(project)}
+        alt={`${project.name} cover`}
+        width={1200}
+        height={630}
+        priority
+        sizes="(min-width: 1240px) 1160px, 100vw"
+        className="mt-10 aspect-[1200/630] w-full rounded-md border border-line object-cover"
+      />
 
       <div className="mt-10 grid gap-x-10 gap-y-8 border-t border-line pt-8 md:grid-cols-[160px_1fr]">
         {project.role && (

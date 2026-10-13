@@ -1,11 +1,25 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/data/projects";
+import { projectCoverSrc } from "@/data/projects";
 
 export default function ProjectItem({ project }: { project: Project }) {
   const { live, repo } = project.links ?? {};
 
   return (
-    <div className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-line px-2 py-7 transition-colors duration-250 hover:bg-surface has-[a:focus-visible]:bg-surface md:grid-cols-[64px_1fr_auto] md:gap-8 md:px-4 md:py-9">
+    <div className="group relative grid grid-cols-[auto_1fr_auto] items-center gap-4 border-b border-line px-2 py-7 transition-colors duration-250 hover:bg-surface has-[a:focus-visible]:bg-surface md:grid-cols-[200px_56px_1fr_auto] md:gap-8 md:px-4 md:py-9">
+      {/* Hidden on phones: at 320px the row has no width to spare, and the
+          name and tagline carry more than a shrunk cover would. sizes pins the
+          thumbnail to the 200px column so a 1200px source is never sent. */}
+      <Image
+        src={projectCoverSrc(project)}
+        alt=""
+        width={1200}
+        height={630}
+        sizes="200px"
+        className="hidden aspect-[1200/630] w-full rounded-sm border border-line object-cover md:block"
+      />
+
       <span className="font-display text-[13px] text-muted tabular-nums">
         {project.number}
       </span>

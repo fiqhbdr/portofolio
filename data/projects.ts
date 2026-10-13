@@ -10,23 +10,15 @@ export type Project = {
   whatIBuilt?: string;
   features?: string[];
   screenshots?: string[];
+  // Path to a real screenshot in /public. Falls back to the generated cover
+  // at /projects/[slug]/cover when absent.
+  cover?: string;
   links?: {
     repo?: string;
     live?: string;
   };
   featured?: boolean;
   isExperiment?: boolean;
-};
-
-export type PartnerProject = {
-  slug: string;
-  name: string;
-  description: string;
-  stack: string[];
-  links?: {
-    repo?: string;
-    live?: string;
-  };
 };
 
 // Open source projects, in display order. Add new entries here — no UI changes needed.
@@ -245,17 +237,12 @@ export const projects: Project[] = [
   },
 ];
 
-// Partner work, kept separate and intentionally less prominent than open source projects.
-export const partners: PartnerProject[] = [
-  {
-    slug: "platform-film",
-    name: "Platform Film",
-    description: "Built end to end, from API to interface.",
-    stack: ["Laravel REST API", "Next.js", "PostgreSQL", "Cloudflare R2"],
-    links: {},
-  },
-];
-
 export function getProjectBySlug(slug: string) {
   return projects.find((p) => p.slug === slug);
+}
+
+// One image per project, always present, so the list never mixes rows with and
+// without a picture.
+export function projectCoverSrc(project: Project) {
+  return project.cover ?? `/projects/${project.slug}/cover`;
 }
