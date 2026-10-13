@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import type { ContributionDay } from "@/lib/contributions";
 
 const LEVELS = [
@@ -36,17 +33,14 @@ const DATE_FORMAT = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+// Built here, on the server, and carried on each cell as data-tip so the
+// client only has to read it back out.
 function describe(date: string, count: number) {
   const label = DATE_FORMAT.format(new Date(`${date}T00:00:00Z`));
   if (count === 0) return `No contributions on ${label}`;
   if (count === 1) return `1 contribution on ${label}`;
   return `${count} contributions on ${label}`;
 }
-
-type Tooltip = { text: string; x: number; y: number };
-
-// Roughly half of the widest tooltip, used to keep the popup inside the viewport.
-const TOOLTIP_HALF_WIDTH = 110;
 
 export default function ContributionGraph({
   days,
@@ -55,8 +49,6 @@ export default function ContributionGraph({
   days: ContributionDay[];
   total: number;
 }) {
-  const [tooltip, setTooltip] = useState<Tooltip | null>(null);
-
   const columns = Math.max(...days.map((day) => day.week)) + 1;
   const gridTemplateColumns = `repeat(${columns}, minmax(0, 1fr))`;
 
@@ -69,18 +61,6 @@ export default function ContributionGraph({
       months.push({ label: MONTHS[month - 1], column: day.week + 1 });
       previousMonth = month;
     }
-  }
-
-  function showTooltip(day: ContributionDay, target: HTMLElement) {
-    const rect = target.getBoundingClientRect();
-    setTooltip({
-      text: describe(day.date, day.count),
-      x: Math.min(
-        Math.max(rect.left + rect.width / 2, TOOLTIP_HALF_WIDTH),
-        window.innerWidth - TOOLTIP_HALF_WIDTH,
-      ),
-      y: rect.top,
-    });
   }
 
   const totalLabel = total.toLocaleString("en-US");
@@ -131,8 +111,7 @@ export default function ContributionGraph({
           {days.map((day) => (
             <span
               key={day.date}
-              onMouseEnter={(event) => showTooltip(day, event.currentTarget)}
-              onMouseLeave={() => setTooltip(null)}
+              data-tip={describe(day.date, day.count)}
               style={{
                 gridColumnStart: day.week + 1,
                 gridRowStart: day.weekday + 1,
@@ -168,16 +147,6 @@ export default function ContributionGraph({
           <span>More</span>
         </div>
       </div>
-
-      {tooltip && (
-        <div
-          role="tooltip"
-          className="pointer-events-none fixed z-40 -translate-x-1/2 -translate-y-full whitespace-nowrap rounded-md bg-surface-hover px-2 py-1 text-[11px] text-ink ring-1 ring-line"
-          style={{ left: tooltip.x, top: tooltip.y - 8 }}
-        >
-          {tooltip.text}
-        </div>
-      )}
     </div>
   );
 }
