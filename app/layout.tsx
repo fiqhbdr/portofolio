@@ -19,10 +19,18 @@ const manrope = Manrope({
 
 // Wordmark only. Geometric letterforms hold their weight at 16px where the
 // display face reads flat next to the 14px nav links.
+//
+// Not preloaded, deliberately. It is one 16px word in the navbar, but preloading
+// it put a fourth high-priority file on the wire competing with Manrope, which
+// is the font the h1 is set in. The h1 is the largest paint on the page, and it
+// is repainted when Manrope lands, so every byte ahead of Manrope in the queue
+// is added straight to LCP. Loaded through the stylesheet instead, it swaps in a
+// few hundred milliseconds later at a size where nobody can see it happen.
 const sora = Sora({
   subsets: ["latin"],
   variable: "--font-sora",
   display: "swap",
+  preload: false,
 });
 
 const DESCRIPTION =
