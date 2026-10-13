@@ -1,8 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { WEB3FORMS_KEY } from "@/lib/contact";
+
+// Measuring in a layout effect keeps the widget from being mounted at one size
+// and swapped to the other a frame later, which is what used to make the box
+// flash between the two shapes on a warm cache. The server has no layout to
+// read, so it falls back to the no-op effect and renders the widget on the
+// client only.
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 const ENDPOINT = "https://api.web3forms.com/submit";
 
@@ -35,7 +43,14 @@ export default function ContactForm() {
   const [notice, setNotice] = useState("");
   const [token, setToken] = useState("");
   const [captchaFailed, setCaptchaFailed] = useState(false);
-  const [strip, setStrip] = useState(false);
+  // null until the box has been measured. Nothing is mounted before that, so
+  // the widget never appears at a size it is about to leave.
+  const [strip, setStrip] = useState<boolean | null>(null);
+  // The widget injects hCaptcha's 105KB script on mount, and mounting it with
+  // the page is what put a third-party cookie, a 149ms blocking task, and a
+  // deprecated-API warning on every visit. It stays unmounted until the form is
+  // close to the viewport or someone reaches for a field.
+  const [armed, setArmed] = useState(false);
   const captcha = useRef<HCaptcha>(null);
   const captchaBox = useRef<HTMLDivElement>(null);
   const sending = status === "sending";
@@ -44,16 +59,32 @@ export default function ContactForm() {
 
   // Measured rather than inferred from a breakpoint, because how much room the
   // form has inside depends on its own padding and on the column it lands in.
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     const box = captchaBox.current;
     if (!box) return;
 
     const measure = () => setStrip(box.clientWidth >= CAPTCHA_STRIP_WIDTH);
 
     measure();
-    const observer = new ResizeObserver(measure);
-    observer.observe(box);
-    return () => observer.disconnect();
+    const resize = new ResizeObserver(measure);
+    resize.observe(box);
+
+    // A screen of slack, so the script has landed by the time the widget is
+    // actually looked at.
+    const approach = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setArmed(true);
+        approach.disconnect();
+      },
+      { rootMargin: "600px 0px 600px 0px" },
+    );
+    approach.observe(box);
+
+    return () => {
+      resize.disconnect();
+      approach.disconnect();
+    };
   }, []);
 
   // Crossing the threshold swaps in a fresh, unsolved widget, so a token solved
@@ -136,6 +167,7 @@ export default function ContactForm() {
   return (
     <form
       onSubmit={onSubmit}
+      onFocusCapture={() => setArmed(true)}
       className="rounded-lg border border-line p-6 md:p-8"
     >
       <div className="grid gap-5 md:grid-cols-2">
@@ -208,22 +240,28 @@ export default function ContactForm() {
       <div
         ref={captchaBox}
         className="mt-6"
-        style={{ minHeight: strip ? CAPTCHA_STRIP_HEIGHT : CAPTCHA_BLOCK_HEIGHT }}
+        style={{
+          minHeight: strip
+            ? CAPTCHA_STRIP_HEIGHT
+            : CAPTCHA_BLOCK_HEIGHT,
+        }}
       >
-        <HCaptcha
-          key={size}
-          ref={captcha}
-          sitekey={HCAPTCHA_SITEKEY}
-          reCaptchaCompat={false}
-          theme="dark"
-          size={size}
-          onVerify={onVerify}
-          onExpire={() => setToken("")}
-          onError={() => {
-            setToken("");
-            setCaptchaFailed(true);
-          }}
-        />
+        {armed && strip !== null && (
+          <HCaptcha
+            key={size}
+            ref={captcha}
+            sitekey={HCAPTCHA_SITEKEY}
+            reCaptchaCompat={false}
+            theme="dark"
+            size={size}
+            onVerify={onVerify}
+            onExpire={() => setToken("")}
+            onError={() => {
+              setToken("");
+              setCaptchaFailed(true);
+            }}
+          />
+        )}
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
