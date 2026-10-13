@@ -10,6 +10,18 @@ const config: Config = {
     extend: {
       colors: {
         bg: "#101214",
+        /*
+          Two section surfaces either side of `bg`, both the same blue-grey
+          family as the base, so the page reads as one dark surface with a
+          slow rise and fall instead of a row of coloured blocks. Only
+          lightness changes; no hue rotation.
+
+          Both stay below `surface` (#181B1F) in luminance, because rows and
+          form fields lift to `surface` on hover and a brighter band would
+          swallow that lift.
+        */
+        "band-lift": "#12161C",
+        "band-sink": "#0D1014",
         surface: "#181B1F",
         "surface-hover": "#1E2227",
         ink: "#F5F7FA",
