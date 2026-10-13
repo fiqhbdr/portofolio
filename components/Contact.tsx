@@ -19,7 +19,17 @@ export default function Contact() {
           under it. Below that the heading would be squeezed into half the
           width, so they stack instead. */}
       <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-16">
-        <Reveal>
+        {/*
+          min-w-0 on both grid items. Without it a grid item keeps
+          min-width: auto, so the hCaptcha iframe inside the form sets the
+          column's minimum to its own width (302px) and the page cannot shrink
+          past it. The form then measures itself as wide enough for the strip
+          shape, which holds the iframe at 302px, and the two keep each other
+          alive: load wide, narrow to a phone, and the page overflows by 56px.
+          Letting the column shrink lets the form fall back to the compact
+          widget instead.
+        */}
+        <Reveal className="min-w-0">
           <h2 className="max-w-[20ch] text-[28px] leading-snug font-semibold text-ink md:text-[36px]">
             Have an idea? Let&apos;s build something useful.
           </h2>
@@ -79,7 +89,7 @@ export default function Contact() {
         </div>
         </Reveal>
 
-        <Reveal delay={60}>
+        <Reveal delay={60} className="min-w-0">
           <ContactForm />
         </Reveal>
       </div>
