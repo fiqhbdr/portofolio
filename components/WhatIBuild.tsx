@@ -1,33 +1,7 @@
+import Link from "next/link";
+import { buildAreas } from "@/data/buildAreas";
+import { getProjectBySlug, type Project } from "@/data/projects";
 import Reveal from "./Reveal";
-
-// Stack per area. Every entry is backed by a repo, a README, or the Gendaga
-// work history, so nothing here is guesswork.
-const areas = [
-  {
-    number: "01",
-    title: "Web Applications",
-    detail: "APIs, dashboards, client applications",
-    stack: ["Next.js", "React", "TypeScript", "PostgreSQL"],
-  },
-  {
-    number: "02",
-    title: "Mobile Tools",
-    detail: "Android and Flutter applications",
-    stack: ["Flutter", "Dart"],
-  },
-  {
-    number: "03",
-    title: "Developer Tools",
-    detail: "Extensions and productivity tools",
-    stack: ["JavaScript", "ExtendScript", "Swift"],
-  },
-  {
-    number: "04",
-    title: "Experiments",
-    detail: "AI, data, APIs, and ideas",
-    stack: ["Python", "Pygame", "Gemini API", "SQL"],
-  },
-];
 
 export default function WhatIBuild() {
   return (
@@ -38,44 +12,45 @@ export default function WhatIBuild() {
         </h2>
       </Reveal>
 
-      <div className="mt-8 divide-y divide-line border-t border-line">
-        {areas.map((area) => (
-          <div
-            key={area.number}
-            className="flex flex-wrap items-baseline gap-x-5 gap-y-2 py-5 md:gap-x-8 md:py-6"
-          >
-            <span className="font-display text-[13px] text-muted tabular-nums">
-              {area.number}
-            </span>
-            <span className="font-display text-[17px] font-medium text-ink md:text-[19px] md:w-[220px] shrink-0">
-              {area.title}
-            </span>
-            {/*
-              The badges sit inside this column rather than as a fourth flex
-              child, so the row keeps its baseline alignment: a flex item's
-              baseline is the baseline of its own first line.
+      <div className="mt-8 border-t border-line">
+        {buildAreas.map((area, i) => {
+          // The names come from the project list rather than being repeated
+          // here, so a renamed project renames in one place.
+          const areaProjects = area.projects
+            .map(getProjectBySlug)
+            .filter((p): p is Project => p !== undefined);
 
-              w-full drops this column onto its own line on mobile, where
-              leaving it inline would squeeze the badges into a narrow strip and
-              stack them one per row. From md up there is room to sit inline.
-            */}
-            <div className="w-full min-w-0 md:w-auto">
-              <span className="text-[14px] text-muted md:text-[15px]">
-                {area.detail}
-              </span>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                {area.stack.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-[6px] border border-line px-2 py-0.5 text-[11px] leading-tight text-muted"
-                  >
-                    {tech}
-                  </span>
-                ))}
+          return (
+            <Reveal key={area.title} delay={i * 60}>
+              <div className="grid gap-3 border-b border-line px-2 py-7 md:grid-cols-[240px_1fr] md:gap-8 md:px-4 md:py-9">
+                <h3 className="font-display text-[19px] font-semibold text-ink md:text-[21px]">
+                  {area.title}
+                </h3>
+
+                <div className="min-w-0">
+                  <p className="max-w-[54ch] text-[15px] leading-relaxed text-muted">
+                    {area.summary}
+                  </p>
+
+                  {/* py-1 on each link keeps the tap target above the 24px
+                      minimum without opening a visible gap in the row. */}
+                  <ul className="mt-3 flex flex-wrap gap-x-6 gap-y-1">
+                    {areaProjects.map((project) => (
+                      <li key={project.slug}>
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          className="inline-block py-1 text-[14px] text-accent transition-colors duration-250 hover:text-accent-hover hover:underline md:text-[15px]"
+                        >
+                          {project.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-            </div>
-          </div>
-        ))}
+            </Reveal>
+          );
+        })}
       </div>
     </section>
   );
